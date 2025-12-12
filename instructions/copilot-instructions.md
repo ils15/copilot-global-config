@@ -172,7 +172,7 @@ NEXT DOCUMENTATION PHASE (Update Memory Bank)
 
 **⚠️ REGRA FUNDAMENTAL ABSOLUTA**: Só criar summaries quando EXPLICITAMENTE solicitado pelo usuário.
 
-**🔴 PROIBIDO 100% (VIOLAÇÃO CRÍTICA - sem exceções)**:
+**🔴 PROIBIDO 100% (VIOLAÇÃO CRÍTICA - sem exceções):**
 - ❌ `cat > /tmp/SUMMARY.txt` ou qualquer variação
 - ❌ `cat > /tmp/SESSION_SUMMARY.md`
 - ❌ `TASK-X-SUMMARY.md` automaticamente
@@ -186,14 +186,32 @@ NEXT DOCUMENTATION PHASE (Update Memory Bank)
 - ❌ Tabelas de status/resumo automáticas
 - ❌ Checklists de conclusão
 - ❌ Estatísticas de mudanças
-- ❌ ASCII art de qualquer tipo- ❌ Arquivos .md fora do Memory Bank (ver: no-unnecessary-files.instructions.md)
+- ❌ ASCII art de qualquer tipo
+- ❌ Arquivos .md fora do Memory Bank (ver: no-unnecessary-files.instructions.md)
 - ❌ Arquivos Python/Shell no root sem justificativa
 - ❌ Criar documentação sem consultar subagent primeiro
+
 **⚠️ ISSO INCLUI MESMO SE**:
 - Tarefa foi concluída com sucesso
 - Há múltiplas mudanças realizadas
 - Sente-se tentação de "resumir"
 - Acha que seria "útil"
+
+**✅ ANTI-SUMMARY CHECKLIST (EXECUTAR ANTES DE QUALQUER TASK)**
+
+**OBRIGATÓRIO para TODAS as tarefas:**
+
+```
+1. [ ] A tarefa usa palavras-chave proibidas (summary, report, consolidate)?
+2. [ ] Há plano de criar arquivo .md "útil"?
+3. [ ] Usuário pediu EXPLICITAMENTE "summary", "report", "log"?
+4. [ ] É uma consolidação SOLICITADA no memory-bank?
+
+SE SIM em 1-2 e NÃO em 3-4: ❌ ABORTAR IMEDIATAMENTE
+SE SIM em 3-4: ✅ Proceder APENAS com memory-bank update
+```
+
+**Referência detalhada:** `/.github/instructions/no-unnecessary-files.instructions.md` (seção ANTI-SUMMARY ENFORCEMENT)
 
 **Quando o usuário QUER summaries (SOMENTE nesses casos)**:
 - ✅ "Crie um sumário visual disso"

@@ -117,6 +117,7 @@ docs/
 ❌ NÃO: Criar `WORK-DONE.md`
 ❌ NÃO: Criar `NEXT-STEPS.md`
 ❌ NÃO: Criar "resumo visual" com cat > /tmp/summary.txt
+❌ NÃO: Criar `IMPLEMENTATION_SUMMARY.md`, `BUGFIX_REPORT.md`, `DEPLOYMENT_LOG.md`
 ✅ SIM: Atualizar `activeContext.md` ou `progress.md` no Memory Bank
 ✅ SIM: Apenas responder ao usuário o que foi feito (sem criar arquivos)
 ```
@@ -319,6 +320,108 @@ Atualizar este arquivo apenas se:
 
 ---
 
+## ⛔ CRITICAL: Anti-Summary Enforcement
+
+### PALAVRAS-CHAVE PROIBIDAS (NUNCA USAR PARA CRIAR ARQUIVOS)
+
+🚫 **PROIBIDO ABSOLUTO:**
+- ❌ `summary`, `SUMMARY`, `Summary`
+- ❌ `report`, `REPORT`, `Report`
+- ❌ `consolidate`, `consolidation`, `CONSOLIDATED`
+- ❌ `log output`, `LOG`, `changelog`
+- ❌ `document changes`, `changes summary`
+- ❌ `overview`, `recap`, `abstract`
+- ❌ `implementation summary`, `bugfix report`
+- ❌ `deployment log`, `session log`
+
+**QUALQUER arquivo com essas palavras = VIOLAÇÃO CRÍTICA**
+
+### PENALIDADE POR VIOLAÇÃO
+
+⚡ **Cada arquivo desnecessário criado:**
+- Desperdício IMEDIATO de tokens
+- Necessidade de ROLLBACK manual
+- Poluição do workspace
+- Reduz velocidade de iteração
+
+**Exemplo de custo:**
+```
+Summary 1 (200 tokens) + Summary 2 (300 tokens) + Report (400 tokens)
+= 900 tokens GASTOS desnecessariamente
+= Budget reduzido para trabalho real
+```
+
+### ANTI-SUMMARY CHECKLIST (EXECUTAR ANTES DE QUALQUER TASK)
+
+🔴 **OBRIGATÓRIO para TODAS as tarefas:**
+
+```
+1. [ ] A tarefa usa palavras-chave proibidas (summary, report, consolidate)?
+2. [ ] Há plano de criar arquivo .md "útil"?
+3. [ ] Usuário pediu EXPLICITAMENTE "summary", "report", "log"?
+4. [ ] É uma consolidação SOLICITADA no memory-bank?
+
+SE SIM em 1-2 e NÃO em 3-4: ❌ ABORTAR IMEDIATAMENTE
+SE SIM em 3-4: ✅ Proceder APENAS com memory-bank update
+```
+
+**Se a resposta for SIM para consolidação solicitada:**
+- Atualizar EXISTENTE arquivo no memory-bank
+- Nunca criar arquivo novo
+- Respeitar estrutura 00-07
+
+### NEVER EVER SECTION
+
+🚫 **NUNCA GERAR:**
+
+```
+## Summary of Changes
+- Modified file X
+- Added feature Y
+- Fixed bug Z
+```
+
+❌ Isso é summary automaticamente = VIOLAÇÃO
+
+🚫 **NUNCA CRIAR:**
+
+- `TASK_SUMMARY.md` após implementar task
+- `PHASE_OVERVIEW.md` ao finalizar fases
+- `CHANGES_REPORT.md` depois de commits
+- `VALIDATION_LOG.md` ao testar código
+- `/tmp/CONSOLIDATION.txt` ou qualquer variação
+- `SESSION_NOTES.md`, `FINAL_REPORT.md`, `STATUS_UPDATE.md`
+
+❌ Qualquer um desses = ERRO CRÍTICO
+
+🚫 **NUNCA EXIBIR:**
+
+```
+Aqui está o sumário de tudo que foi feito:
+├── Arquivo 1: feito ✅
+├── Arquivo 2: feito ✅
+└── ... (20 linhas de status)
+```
+
+❌ Output gigante com resumo = VIOLAÇÃO
+
+✅ **FAZER SEMPRE:**
+
+- Responder direto no chat: "Pronto! Atualizei memory-bank-api/05-progress-log.md"
+- Se houver múltiplas mudanças, listar ARQUIVO/FUNÇÃO (não resumo)
+- Perguntar ao usuário antes de criar QUALQUER arquivo .md novo
+- Validar com checklist acima
+
+### ENFORCEMENT RULE
+
+**Se algum arquivo "summary" for criado:**
+1. É violação imediata das instruções
+2. Deve ser deletado
+3. Conteúdo deve ir para memory-bank OU ser respondido no chat
+4. Não gera relatório "sobre o erro" - apenas corrige
+
+---
+
 ## 📊 Limpeza Executada (2025-12-11)
 
 **Arquivos movidos para .archive/:**
@@ -330,3 +433,5 @@ Atualizar este arquivo apenas se:
 **Total limpo**: 20 arquivos obsoletos
 
 **Regra reforçada**: SEMPRE usar subagent para validar antes de criar .md fora do Memory Bank
+
+**Reforço (2025-12-12)**: Adicionada seção ANTI-SUMMARY ENFORCEMENT com checklist obrigatório, palavras-chave proibidas, penalidade explícita e NEVER EVER examples
