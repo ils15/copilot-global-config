@@ -68,6 +68,12 @@ flowchart TD
    - Includes task index file (`_index.md`) listing all tasks with their statuses
    - Preserves complete thought process and history for each task
 
+8. `audits/` folder
+   - Contains audit reports for service quality and health checks
+   - Each audit has its own file with format `AUDIT-YYYY-MM-DD.md`
+   - Tracks quarterly audits and their findings
+   - Documents what was audited, when, results, and remediation status
+
 ### Additional Context
 Create additional files/folders within memory-bank/ when they help organize:
 - Complex feature documentation
@@ -261,6 +267,127 @@ Each task file follows this format:
 4. Update the task status in the _index.md file to reflect current progress
 
 These detailed progress updates ensure that after memory resets, I can quickly understand the exact state of each task and continue work without losing context.
+
+## Audits Management
+
+The `audits/` folder contains quality and health check reports for the service. This tracks what was audited, when, the findings, and remediation progress.
+
+### Audit File Structure
+
+Each audit is stored as a dated markdown file:
+
+- `audits/AUDIT-2025-12-12.md` - Individual audit report
+- `audits/_index.md` - Master list of all audits with dates and statuses
+
+### Audit Report Template
+
+Each audit file follows this format:
+
+```markdown
+# Audit Report - [Service Name] - [YYYY-MM-DD]
+
+**Auditor:** [Agent name]  
+**Type:** [Quarterly/Pre-Release/Compliance/Ad-hoc]  
+**Status:** [In Progress/Completed/Remediation Pending]  
+**Duration:** [Hours spent]
+
+## Scope
+
+[What was audited - specific areas, files, features]
+
+## Métricas Coletadas
+
+| Metric | Value | Baseline | Change |
+|--------|-------|----------|--------|
+| Total Lines | 12,345 | 11,000 | +12% |
+| Endpoints/Components | 89 | 85 | +4 |
+| Test Coverage | 72% | 65% | +7% |
+| Largest File | routes.py (456 lines) | - | - |
+| God Classes | 2 (> 15 methods) | 3 | -1 |
+
+## Achados Críticos (CRITICAL)
+
+- **Q[X.Y]** ([Category]): [Description]
+  - **File**: [path:line]
+  - **Impact**: [Explanation]
+  - **Remediation**: [What needs to be done]
+  - **Status**: [Not Started/In Progress/Fixed]
+  - **Task**: [Link to TASKXXX if created]
+
+## Achados High Priority (HIGH)
+
+- **Q[X.Y]** ([Category]): [Description]
+  - **File**: [path:line]
+  - **Impact**: [Explanation]
+  - **Remediation**: [What needs to be done]
+  - **Status**: [Not Started/In Progress/Fixed]
+
+## Achados Medium Priority (MEDIUM)
+
+[Same structure as above]
+
+## Padrões Positivos
+
+✅ [What's working well]  
+✅ [Good patterns found]  
+✅ [Architectural strengths]
+
+## Ações Recomendadas
+
+| Priority | Action | Owner | Deadline | Status |
+|----------|--------|-------|----------|--------|
+| CRITICAL | Fix [issue] | @backend | Week 1 | ⏳ Pending |
+| HIGH | Refactor [module] | @backend | Week 2 | ⏳ Pending |
+| MEDIUM | Add tests | @reviewer | Week 4 | ⏳ Pending |
+
+## Tasks Created
+
+- [TASK123] - Fix critical issue from Q3.1
+- [TASK124] - Implement high priority refactoring from Q1.2
+
+## Próxima Auditoria
+
+**Scheduled**: [YYYY-MM-DD]  
+**Focus**: [Areas to re-audit or new areas to cover]
+```
+
+### Audit Index Structure
+
+The `_index.md` file maintains a list of all audits:
+
+```markdown
+# Audits Index
+
+## Completed
+- **2025-12-12** - Q4 Quarterly Audit - Status: Remediation In Progress (3/10 fixed)
+- **2025-09-15** - Q3 Quarterly Audit - Status: Completed (10/10 fixed)
+
+## Scheduled
+- **2026-03-15** - Q1 2026 Quarterly Audit
+```
+
+### What to Document
+
+**Always include in audit reports:**
+- **Date** - When audit was performed
+- **Auditor** - Which agent(s) performed it
+- **Type** - Quarterly/Pre-Release/Compliance/Ad-hoc
+- **Status** - In Progress/Completed/Remediation Pending
+- **Métricas** - Quantitative metrics (lines, files, coverage, etc)
+- **Findings** - Categorized by severity (CRITICAL/HIGH/MEDIUM/LOW)
+- **File References** - Exact paths and line numbers for issues
+- **Remediation Status** - What's fixed, what's pending
+- **Tasks Created** - Link to TASKXXX entries created from findings
+- **Next Audit Date** - When to re-audit
+
+### Integration with Tasks
+
+When audit finds issues requiring work:
+1. Create TASK entry in `tasks/TASKXXX-audit-finding.md`
+2. Reference the audit report in the task
+3. Update audit report with task link
+4. Update task status as work progresses
+5. Update audit report when finding is remediated
 
 ### Task Commands
 

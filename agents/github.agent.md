@@ -268,6 +268,166 @@ Before creating a PR:
 - ✅ PR title is descriptive
 - ✅ PR body explains changes and links issues
 
+## 🔒 Security & .gitignore Verification (MANDATORY)
+
+**⚠️ CRITICAL: Sempre verificar .gitignore antes de QUALQUER commit para garantir segurança de dados**
+
+### Checklist de Segurança Obrigatório
+
+Antes de qualquer `git add` ou `git commit`, executar:
+
+```bash
+# 1. Verificar arquivos não rastreados
+git status --porcelain
+
+# 2. Verificar se há dados sensíveis expostos
+git diff --cached --name-only | xargs grep -l -E "(password|secret|key|token|credential)" || echo "✅ Nenhum arquivo sensível encontrado"
+
+# 3. Verificar .gitignore existe e está atualizado
+ls -la .gitignore
+git check-ignore -v node_modules/ dist/ .env* *.log || echo "⚠️ Arquivos podem não estar ignorados"
+```
+
+### Dados Sensíveis que DEVEM ser ignorados
+
+**🚫 NUNCA commitar:**
+- `.env*` - Arquivos de ambiente com chaves API
+- `*.key`, `*.pem` - Chaves privadas/SSL
+- `*password*`, `*secret*` - Credenciais hardcoded
+- `config/local.*` - Configurações locais
+- `.vault-token`, `.infisical-token` - Tokens de acesso
+- `logs/*.log` - Logs com dados sensíveis
+- `*.sqlite`, `*.db` - Bancos locais com dados reais
+- `cache/`, `tmp/` - Dados temporários/cache
+
+### Verificação Automática de Segurança
+
+```bash
+#!/bin/bash
+# security-check.sh - Executar antes de commits
+
+echo "🔍 Verificando segurança antes do commit..."
+
+# Verificar arquivos sensíveis não ignorados
+SENSITIVE_FILES=$(find . -name "*.env*" -o -name "*secret*" -o -name "*key*" -o -name "*.pem" | grep -v .git)
+
+if [ ! -z "$SENSITIVE_FILES" ]; then
+    echo "🚨 ARQUIVOS SENSÍVEIS ENCONTRADOS:"
+    echo "$SENSITIVE_FILES"
+    echo "⚠️  Adicione ao .gitignore IMEDIATAMENTE!"
+    exit 1
+fi
+
+# Verificar se .gitignore existe
+if [ ! -f .gitignore ]; then
+    echo "🚨 .gitignore NÃO ENCONTRADO!"
+    echo "⚠️  Crie .gitignore antes de continuar"
+    exit 1
+fi
+
+# Verificar padrões comuns no .gitignore
+REQUIRED_PATTERNS=(
+    "node_modules/"
+    ".env"
+    "*.log"
+    "dist/"
+    ".DS_Store"
+    "Thumbs.db"
+)
+
+MISSING_PATTERNS=()
+for pattern in "${REQUIRED_PATTERNS[@]}"; do
+    if ! grep -q "^${pattern}" .gitignore 2>/dev/null; then
+        MISSING_PATTERNS+=("$pattern")
+    fi
+done
+
+if [ ${#MISSING_PATTERNS[@]} -gt 0 ]; then
+    echo "⚠️  Padrões ausentes no .gitignore:"
+    printf '  - %s\n' "${MISSING_PATTERNS[@]}"
+    echo "💡 Considere adicionar estes padrões"
+fi
+
+echo "✅ Verificação de segurança concluída"
+```
+
+### Ações Corretivas Automáticas
+
+**Se arquivos sensíveis forem encontrados:**
+```bash
+# Adicionar automaticamente ao .gitignore
+echo "*.env*" >> .gitignore
+echo "*secret*" >> .gitignore
+echo "*.key" >> .gitignore
+echo "*.pem" >> .gitignore
+
+# Remover do staging se já adicionado
+git reset HEAD .env* *secret* *.key *.pem 2>/dev/null || true
+
+# Verificar se arquivos ainda existem no working directory
+ls -la .env* *secret* *.key *.pem 2>/dev/null || echo "✅ Arquivos sensíveis não encontrados no diretório"
+```
+
+### Integração com Git Hooks
+
+**Configurar pre-commit hook para verificação automática:**
+
+```bash
+# .git/hooks/pre-commit
+#!/bin/bash
+
+echo "🔒 Executando verificação de segurança..."
+
+# Executar verificação de segurança
+if ! bash scripts/security-check.sh; then
+    echo "❌ Verificação de segurança falhou!"
+    echo "💡 Corrija os problemas antes de commitar"
+    exit 1
+fi
+
+echo "✅ Segurança verificada - prosseguindo com commit"
+```
+
+## ⚠️ Limitações do Ambiente Git
+
+**IMPORTANTE**: Devido a limitações técnicas do ambiente, os hooks de pre-commit podem não ser executados automaticamente pelo Git. Como alternativa obrigatória, siga este protocolo manual:
+
+### Protocolo de Segurança Manual (OBRIGATÓRIO)
+
+1. **ANTES de QUALQUER commit**:
+   ```bash
+   # Execute verificação manual (OBRIGATÓRIA)
+   ./scripts/security-check.sh
+   ```
+
+2. **Apenas se a verificação PASSAR, então commit**:
+   ```bash
+   git add arquivos
+   git commit -m "mensagem"
+   ```
+
+3. **Se a verificação FALHAR**:
+   - Corrija todos os problemas identificados
+   - Execute `./scripts/security-check.sh` novamente
+   - Só então faça o commit
+
+### Scripts de Segurança Disponíveis
+
+- `scripts/security-check.sh` - Verificação completa de segurança
+- `scripts/install-security-hooks.sh` - Instalar hooks (se suportado)
+- `scripts/test-security-system.sh` - Testar sistema completo
+- `scripts/SECURITY-README.md` - Documentação detalhada
+
+### Checklist de Segurança Obrigatório
+
+- ✅ `.gitignore` existe e contém padrões obrigatórios
+- ✅ Nenhum arquivo sensível no diretório de trabalho
+- ✅ Nenhum arquivo sensível no staging area
+- ✅ Verificação manual executada antes de commits
+- ✅ Dados confidenciais nunca committados
+
+**VIOLAÇÃO CRÍTICA**: Commits sem verificação de segurança podem expor dados sensíveis e são considerados falha de segurança grave.
+
 ## Memory Bank Reference
 
 See `.github/memory-bank/` for:
