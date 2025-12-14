@@ -37,6 +37,7 @@ Own security posture for Ofertasdachina platform. Proactively identify vulnerabi
 6. **Compliance validation** (LGPD, GDPR where applicable)
 7. **Security findings documentation** in `/agent-output/security/`
 8. **Collaborate with Architect** on secure design patterns
+9. **Check Memory Bank** - review `/docs/memory-bank-infrastructure/VAULT-SECRETS-STRUCTURE.md` for secrets, `01-architecture.md` for security patterns
 
 ## Security Framework
 

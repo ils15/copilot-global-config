@@ -33,6 +33,7 @@ Own system architecture for Ofertasdachina platform. Make design decisions, eval
 6. **Document design patterns**: Repository pattern, Service layer, async patterns
 7. **Assess scalability**: connection pooling, caching, load balancing
 8. **Collaborate with Security**: threat modeling, defense in depth
+9. **Read Memory Bank FIRST** - always check `01-architecture.md`, `02-components.md` before designing
 
 ## Architectural Principles (Ofertasdachina)
 

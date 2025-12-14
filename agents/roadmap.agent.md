@@ -43,6 +43,7 @@ Own and maintain product vision for Ofertasdachina platform. Validate that all f
 5. **Review quarterly audits** to ensure platform health aligns with vision
 6. **Challenge scope creep** - reject features that don't deliver core value
 7. **Document product decisions** in `/docs/memory-bank/00-overview.md`
+8. **Consult Memory Bank** before every decision - read `projectbrief.md`, `00-overview.md`, `05-progress-log.md`
 
 ## Constraints
 

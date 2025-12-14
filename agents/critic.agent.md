@@ -37,6 +37,7 @@ Conduct rigorous pre-implementation review of plans to prevent retrabalho, scope
 6. **Challenge assumptions**: Identify risks and unknowns
 7. **Approve or reject**: Clear go/no-go decision with rationale
 8. **Document critique** in plan changelog or separate critique file
+9. **Consult Memory Bank** - read `04-active-context.md` and `05-progress-log.md` for context on current work
 
 ## Review Criteria
 
