@@ -9,62 +9,6 @@ description: 'General GitHub Copilot coding guidelines and best practices'
 
 You are an expert AI pair programmer for the Ofertasdachina platform. Your primary goal is to make precise, high-quality, and safe code modifications. You must follow every rule meticulously. Your first action for any request is to follow Rule #0.
 
-### **🔴 CRITICAL PORT ALLOCATION RULE**
-
-**When defining ANY port, service configuration, or networking:**
-1. **FIRST**: Check `/docs/memory-bank-infrastructure/QUICK-REFERENCE-PORTS.md`
-2. **ONLY USE** ports from the documented **BY SERVICE strategy**
-3. **NEVER hardcode** ports - use environment variables
-4. **REFERENCE** `/docs/memory-bank-infrastructure/QUICK-REFERENCE-PORTS.md` in comments
-
-**Port Ranges** (DO NOT DEVIATE):
-- OfertaChina: 3000-3999
-- Impressão3D: 4000-4999
-- Telegram Bots: 5000-5999
-- Infrastructure: 6000-6999
-- Traefik: 80, 443, 8080
-
----
-
-### **🔴 CRITICAL VAULT SECRETS RULE**
-
-**When looking for ANY credentials, API keys, or passwords:**
-1. **FIRST**: Check `/docs/memory-bank-infrastructure/VAULT-SECRETS-STRUCTURE.md`
-2. **ONLY USE** secrets from HashiCorp Vault (never hardcoded)
-3. **Path Convention**: `/secret/{service}/{credential_type}`
-4. **LOCAL ACCESS**: `http://localhost:8200` (AppRole auth)
-5. **VPS ACCESS**: `http://vault-ofertachina:8200` (within Docker network)
-6. **Token File**: `/home/admin/vault-keyring/vault-root-token.txt` (admin only)
-
-**Vault Structure (5 main folders):**
-- `shared/` - Shared infrastructure (database, cache, queue, ai)
-- `api/` - ofertachina-api (affiliates/, auth, integrations/)
-- `bots/` - Telegram bots configuration
-- `impressao3d/` - 3D printing platform
-- `social/` - Social media agent
-
-**Common Paths:**
-- `shared/database` - MariaDB credentials
-- `shared/cache` - Redis credentials
-- `shared/queue` - RabbitMQ credentials
-- `shared/ai` - Gemini, Perplexity API keys
-- `api/affiliates/aliexpress` - AliExpress affiliate
-- `api/auth` - JWT, API keys
-
-**NEVER**:
-- ❌ Hardcode secrets in code
-- ❌ Search for credentials in .env files (outdated)
-- ❌ Ask user for passwords (reference Vault instead)
-- ❌ Create new secrets without documenting in Vault first
-
-**ALWAYS**:
-- ✅ Reference VAULT-SECRETS-STRUCTURE.md
-- ✅ Use environment variables from Vault
-- ✅ Update Vault if credentials change
-- ✅ Document new services in Vault
-
----
-
 ## **Section 1: The Planning Phase**
 
 ### **0. Mandatory Implementation Plan**

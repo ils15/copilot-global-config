@@ -57,6 +57,94 @@ for our FastAPI backend. Then provide a 1-page summary."
 
 ---
 
+## 🔍 Transparência e Comunicação de Subagentes
+
+**NOVO PADRÃO (2025-12-15)**: Sempre comunicar qual subagente está sendo usado e o quê ele está fazendo.
+
+### Quando Invocar um Subagente
+
+Antes de chamar o subagente, comunicar claramente:
+
+```
+🤖 Subagente em uso: [Nome do Agente]
+📋 Tarefa: [O que está fazendo, em 1-2 linhas]
+⏳ Processando...
+```
+
+### Quando o Subagente Retorna
+
+Apresentar resultado da forma estruturada:
+
+```
+✅ [Nome do Agente] completou:
+   - [Resultado 1]
+   - [Resultado 2]
+   - [Resultado 3]
+```
+
+### Exemplos Reais
+
+**1. Análise de Código (Debug Subagent)**
+```
+🤖 Subagente: debug
+📋 Analisando routers/links.py para duplicação de código e problemas N+1
+⏳ Processando...
+
+✅ debug completou:
+   - Encontrou 5 funções duplicadas (linhas 23, 45, 67, 89, 102)
+   - Identificou 3 queries N+1 em endpoints de lista
+   - Sugeriu consolidação em 2 arquivos novos
+```
+
+**2. Validação de Mudanças (Reviewer Subagent)**
+```
+🤖 Subagente: Reviewer
+📋 Validando 3 arquivos modificados em services/ para segurança e lógica
+⏳ Processando...
+
+✅ Reviewer completou:
+   - Código validado: sem vulnerabilidades críticas
+   - Cobertura de testes: 82% (OK)
+   - Linha mais complexa: função X no arquivo Y (refatorar? recomendado)
+```
+
+**3. Planejamento (Planner Subagent)**
+```
+🤖 Subagente: Planner
+📋 Criando plano de implementação de autenticação JWT (4 fases)
+⏳ Processando...
+
+✅ Planner completou:
+   - Fase 1: Setup e models (2 dias)
+   - Fase 2: Endpoints de login/refresh (1 dia)
+   - Fase 3: Middleware e proteção de rotas (1 dia)
+   - Fase 4: Testes e documentação (1 dia)
+   - Plano completo atualizado em Memory Bank
+```
+
+**4. Análise de Bot Ecosystem (Debug Subagent para auditoria)**
+```
+🤖 Subagente: debug
+📋 Auditando todos 4 bots (alertas, ofertas, affiliate, username) em paralelo
+⏳ Processando... (análise complexa, ~3-5 min)
+
+✅ debug completou:
+   - alertas_bot: 5 issues críticas (race conditions, pool exhaustion)
+   - ofertas_bot: 4 high-priority issues (duplicate code, bare exceptions)
+   - affiliate_bot: 3 medium issues (AI fallback gaps, retry logic)
+   - username_bot: ✅ Saudável após fixes (85/100 score)
+```
+
+### Por Que Comunicar?
+
+- **Transparência**: Você sabe exatamente o que está acontecendo
+- **Rastreabilidade**: Fácil ver qual agent processou cada coisa
+- **Debugging**: Se algo der errado, sabemos onde procurar
+- **Performance**: Você acompanha progresso de tarefas longas
+- **Confiança**: Não é uma "caixa preta" — cada passo é visível
+
+---
+
 ## 🎯 Padrões de Uso
 
 ### Padrão 1: Simple Task (no subagent needed)

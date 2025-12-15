@@ -68,7 +68,7 @@ grep -r "^from " bots/{bot_name} | sort | uniq -d
 
 ### Fase 3: Checklist de Qualidade (15 min)
 
-Use o template padrão de **25 questões** em 5 categorias:
+Use o template padrão de **30 questões** em 6 categorias:
 
 #### 1️⃣ ESTRUTURA (5 questões)
 
@@ -110,21 +110,29 @@ Use o template padrão de **25 questões** em 5 categorias:
 - Q5.4: Existe versionamento de schema/migrations?
 - Q5.5: Comandos estão documentados em `/help`?
 
+#### 6️⃣ COMPLEXIDADE (5 questões) ⭐ **NOVO**
+
+- Q6.1: Qual é a complexidade ciclomática máxima por função? (Target: <10)
+- Q6.2: Há nesting profundo de if/loops (>3 níveis)? Onde?
+- Q6.3: Funções têm parâmetros desnecessários ou lógica "over-engineered"?
+- Q6.4: Existe código que poderia ser simplificado com bibliotecas padrão?
+- Q6.5: Há abstrações excessivas (interfaces/classes desnecessárias)?
+
 ### Fase 4: Priorização e Relatório (10 min)
 
 Classificar todos os issues encontrados:
 
-- 🔴 **CRITICAL**: Fix today (runtime errors, security breaches)
-  - Exemplo: Pool exhaustion, hardcoded secrets, SQL injection
+- 🔴 **CRITICAL**: Fix today (runtime errors, security breaches, performance degradation)
+  - Exemplo: Pool exhaustion, hardcoded secrets, SQL injection, >15 cyclomatic complexity
   
-- 🟠 **HIGH**: Fix this sprint (major refactoring)
-  - Exemplo: God objects, major code duplication, missing error handling
+- 🟠 **HIGH**: Fix this sprint (major refactoring, code complexity)
+  - Exemplo: God objects, major code duplication, missing error handling, over-engineered patterns, nesting >4 levels
   
-- 🟡 **MEDIUM**: Fix next sprint (improvements)
-  - Exemplo: Missing type hints, low test coverage, optimization opportunities
+- 🟡 **MEDIUM**: Fix next sprint (improvements, simplification)
+  - Exemplo: Missing type hints, low test coverage, optimization opportunities, high parameter count, unnecessary abstractions
   
 - 🟢 **LOW**: Backlog (nice-to-have)
-  - Exemplo: Docstring improvements, logging verbosity, code style
+  - Exemplo: Docstring improvements, logging verbosity, code style, minor simplifications
 
 ---
 
@@ -150,16 +158,20 @@ EXECUTAR AUDITORIA DE BOT:
 4. Auditar MÚLTIPLOS bots em paralelo?
    ├─ SIM → USE MÚLTIPLOS SUBAGENTS (paralelizar)
    └─ NÃO → USE 1 SUBAGENT sequencial
+
+5. Análise de COMPLEXIDADE/Simplificação?
+   ├─ SIM → USE @backend (refactoring specialist)
+   └─ Para code cleanup & pattern review
 ```
 
 ### Subagent Selection por Bot Type
 
-| Bot Type | Primary Subagent | Secondary Subagent |
-|----------|-----------------|-------------------|
-| **Verification Bot** | @debug (security focus) | @reviewer (validation) |
-| **Alert Bot** | @debug (performance focus) | @backend (optimization) |
-| **Commerce Bot** | @debug (API integration focus) | @reviewer (conversion) |
-| **Helper Bot** | @debug (UX flow focus) | @backend (AI integration) |
+| Bot Type | Primary Subagent | Secondary Subagent | Complexity Expert |
+|----------|-----------------|-------------------|------------------|
+| **Verification Bot** | @debug (security focus) | @reviewer (validation) | @backend (simplification) |
+| **Alert Bot** | @debug (performance focus) | @backend (optimization) | @backend (refactoring) |
+| **Commerce Bot** | @debug (API integration focus) | @reviewer (conversion) | @backend (code cleanup) |
+| **Helper Bot** | @debug (UX flow focus) | @backend (AI integration) | @backend (complexity reduction) |
 
 ### Subagent Prompt Template
 
@@ -314,14 +326,17 @@ Todos os relatórios de auditoria devem seguir este formato:
 
 ### ❌ Anti-Patterns (Nunca Fazer)
 
-| Pattern | Why Bad | Example |
-|---------|---------|---------|
-| **Hardcoded Admin IDs** | Security risk, not configurable | `ADMIN_IDS = [141386101]` |
-| **Callbacks in setup()** | Not testable, hard to debug | Registering handlers no main |
-| **CommandHandler >10 methods** | God object, hard to test | 17+ métodos em 1 classe |
-| **DB connections not closed** | Connection pool exhaustion | `cursor = conn.cursor()` (no finally) |
-| **Silent exception handlers** | Impossible to debug | `except Exception: pass` |
-| **Duplicated admin logic** | Maintenance nightmare | Same admin menu em 4 bots |
+| Pattern | Why Bad | Example | Complexity Impact |
+|---------|---------|---------|------------------|
+| **Hardcoded Admin IDs** | Security risk, not configurable | `ADMIN_IDS = [141386101]` | N/A |
+| **Callbacks in setup()** | Not testable, hard to debug | Registering handlers no main | High |
+| **CommandHandler >10 methods** | God object, hard to test | 17+ métodos em 1 classe | High |
+| **Deep nesting (>3 levels)** | Hard to understand, error-prone | if/elif/elif/else/try within loop | **HIGH COMPLEXITY** |
+| **Over-engineered abstractions** | Unnecessary complexity, poor performance | Custom event system when simple pattern works | **HIGH COMPLEXITY** |
+| **Many function parameters (>7)** | Hard to call, maintain, test | `def process(a, b, c, d, e, f, g, h)` | **MEDIUM COMPLEXITY** |
+| **DB connections not closed** | Connection pool exhaustion | `cursor = conn.cursor()` (no finally) | N/A |
+| **Silent exception handlers** | Impossible to debug | `except Exception: pass` | N/A |
+| **Duplicated admin logic** | Maintenance nightmare | Same admin menu em 4 bots | N/A |
 
 ---
 
@@ -334,9 +349,13 @@ Todos os relatórios de auditoria devem seguir este formato:
 | **Code duplication** | <20% | 20-40% | >40% | HIGH |
 | **Test coverage** | >70% | 40-70% | <40% | MEDIUM |
 | **Type hints** | >90% | 70-90% | <70% | MEDIUM |
+| **Cyclomatic complexity** | <10 | 10-15 | >15 | HIGH |
+| **Max nesting depth** | <3 | 3-4 | >4 | MEDIUM |
+| **Function parameters** | <5 | 5-7 | >7 | MEDIUM |
 | **Hardcoded config** | 0 | 1-3 | >3 | CRITICAL |
 | **Connection leaks** | 0 | 1-2 | >2 | CRITICAL |
 | **Silent exceptions** | 0 | 1-2 | >2 | CRITICAL |
+| **Over-engineered patterns** | 0 | 1-2 | >2 | HIGH |
 
 ---
 
