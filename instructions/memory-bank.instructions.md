@@ -74,10 +74,18 @@ flowchart TD
    - Tracks quarterly audits and their findings
    - Documents what was audited, when, results, and remediation status
 
+9. `notes/` folder (NEW - Dec 2025)
+   - For documentation that is NOT a formal task
+   - Format: `DDMMYYYY-description.md` (e.g., `16122025-violation-policy-implementation.md`)
+   - Used for: Implementation summaries, temporary notes, session logs, quick fixes
+   - **CRITICAL RULE**: All documentation MUST go in Memory Bank (in notes/ if not a task)
+   - **NO .md files outside of memory-bank/ directory - EVER**
+
 ### Additional Context
 Create additional files/folders within memory-bank/ when they help organize:
-- Complex feature documentation
-- Integration specifications
+- Complex feature documentation (subdirectory)
+- Integration specifications (subdirectory)
+- Session notes (use notes/ folder with DDMMYYYY prefix)
 - API documentation
 - Testing strategies
 - Deployment procedures
