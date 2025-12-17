@@ -25,7 +25,84 @@ Este documento define o processo padrão de auditoria para a **impressao3dbr** (
 
 ---
 
-## 🔍 Estrutura de Auditoria (4 Fases)
+## 🔍 Audit Process
+
+Follow the [shared audit template](_audit-template.md) for the 4-phase process (Assessment, Execution, Organization, Review), 30-question checklist, metrics table, and prioritization format.
+
+---
+
+## 🖨️ Impressão 3D-Specific Audit Sections
+
+### Marketplace Specific
+- ✅ Order fulfillment workflow handles 3D printing complexities?
+- ✅ Payment processing accounts for production time/costs?
+- ✅ Dispute resolution system for print quality issues?
+- ✅ Vendor rating system considers print success rates?
+- ⚠️ Compliance with e-commerce regulations (consumer protection)?
+
+### STL/OBJ Processing
+- ✅ File validation prevents corrupted/malicious STL files?
+- ✅ 3D model preview generation works reliably?
+- ✅ File size limits appropriate for 3D models?
+- ✅ Format conversion (STL↔OBJ) maintains quality?
+- ⚠️ Processing handles large/complex models without timeouts?
+
+---
+
+## 🤖 Subagent Usage
+
+### Decision Matrix
+- Use @frontend for UI/UX and file upload flows
+- Use @backend for marketplace logic and payment processing
+- Use @database for data integrity and performance
+
+### Workflow
+```
+@frontend: UI & file handling
+  ↓
+@backend: Business logic & payments
+  ↓
+@database: Data & performance
+  ↓
+@planner: Prioritize & document
+```
+
+---
+
+## 📋 Output Format
+
+```markdown
+## 📋 IMPRESSAO3D AUDIT REPORT
+**Date**: {YYYY-MM-DD}  
+**Auditor**: {agent_name}  
+**Status**: [CRITICAL/HIGH/MEDIUM/LOW PRIORITY]
+
+### 📊 SUMMARY METRICS
+[Metrics table from template]
+
+### 🔴 CRITICAL ISSUES
+[List critical issues]
+
+### 🟠 HIGH PRIORITY ISSUES
+[List high priority]
+
+### 🟡 MEDIUM PRIORITY ISSUES
+[List medium priority]
+
+### ✅ STRENGTHS
+[Positive observations]
+
+### 📝 RECOMMENDATIONS
+[Priority items with estimates]
+```
+
+---
+
+## 🔗 Integration
+
+- Save reports in `memory-bank/audit-YYYY-MM-DD.md`
+- Update Memory Bank with findings
+- Escalate marketplace/security issues to @planner/@reviewer
 
 ### Fase 1: Coleta de Métricas (10 min)
 

@@ -1,0 +1,13 @@
+⚠️ DEPRECATED - This file has been reorganized. See new location below.
+
+Files that were consolidated:
+  • copilot-instructions.md → 00-CORE/core.rules.md + 01-WORKFLOWS/copilot-execution.md
+  • no-unnecessary-files.instructions.md → 00-CORE/core.rules.md
+  • memory-bank.instructions.md → 00-CORE/memory-bank-structure.md (partial) + 01-WORKFLOWS/
+
+Files that were moved:
+  • Audit files → 02-AUDITS/
+  • Workflow files → 01-WORKFLOWS/
+  • Domain files → 03-DOMAINS/
+
+Start with: 00-CORE/README.md for navigation

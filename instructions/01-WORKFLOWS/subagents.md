@@ -7,15 +7,13 @@ description: 'Sistema de Roteamento Automático com Context-Isolated Subagents'
 
 ## Visão Geral
 
-Sistema de roteamento automático que integra com **Context-Isolated Subagents** do VS Code. Cada subagente opera de forma isolada com seu próprio context window, otimizando a gestão de contexto para tarefas complexas.
+Sistema de roteamento automático que integra com **Context-Isolated Subagents** do VS Code. Cada subagente opera de forma isolada com seu próprio context window.
 
 **Vantagens:**
-- ✅ Cada subagente tem context window separado (não polui contexto principal)
-- ✅ Autonomia completa (sem pausa para confirmação do usuário)
-- ✅ Retorna apenas resultado final ao chat principal
-- ✅ Perfeito para tarefas de research, analysis, refactoring
-
----
+- ✅ Isolated context windows (no main context pollution)
+- ✅ Full autonomy (no user confirmation pauses)
+- ✅ Returns only final results to main chat
+- ✅ Optimized for research, analysis, refactoring
 
 ## Como Funciona
 
@@ -30,122 +28,100 @@ runSubagent Tool
     ↓
 Subagent (Isolated Context)
     └─ Own context window
-    └─ Access to same tools
+    └─ Same tool access
     └─ No async/background
     └─ Returns final result only
     ↓
 Result back to Main Chat
 ```
 
-### Exemplo Prático
+## 🔍 Transparência e Comunicação
 
-**Usuário em Chat Principal:**
-```
-"Use a subagent to research the best authentication methods 
-for our FastAPI backend. Then provide a 1-page summary."
-```
+**Always communicate which subagent is being used and what it's doing.**
 
-**Sistema:**
-1. ✅ Detecta: "subagent" + "research" + "backend"
-2. ✅ Seleção automática: Backend Researcher Subagent (90% confiança)
-3. ✅ Subagent executa autonomamente:
-   - Lê documentação FastAPI
-   - Pesquisa melhores práticas JWT
-   - Analisa segurança
-   - Gera relatório
-4. ✅ Retorna ao chat principal: "Aqui está o resumo de 1 página..."
-
----
-
-## 🔍 Transparência e Comunicação de Subagentes
-
-**NOVO PADRÃO (2025-12-15)**: Sempre comunicar qual subagente está sendo usado e o quê ele está fazendo.
-
-### Quando Invocar um Subagente
-
-Antes de chamar o subagente, comunicar claramente:
+### Quando Invocar Subagente
 
 ```
-🤖 Subagente em uso: [Nome do Agente]
-📋 Tarefa: [O que está fazendo, em 1-2 linhas]
+🤖 Subagente: [Nome]
+📋 Tarefa: [1-2 lines description]
 ⏳ Processando...
 ```
 
-### Quando o Subagente Retorna
-
-Apresentar resultado da forma estruturada:
+### Quando Retorna
 
 ```
-✅ [Nome do Agente] completou:
+✅ [Nome] completou:
    - [Resultado 1]
    - [Resultado 2]
-   - [Resultado 3]
 ```
-
-### Exemplos Reais
-
-**1. Análise de Código (Debug Subagent)**
-```
-🤖 Subagente: debug
-📋 Analisando routers/links.py para duplicação de código e problemas N+1
-⏳ Processando...
-
-✅ debug completou:
-   - Encontrou 5 funções duplicadas (linhas 23, 45, 67, 89, 102)
-   - Identificou 3 queries N+1 em endpoints de lista
-   - Sugeriu consolidação em 2 arquivos novos
-```
-
-**2. Validação de Mudanças (Reviewer Subagent)**
-```
-🤖 Subagente: Reviewer
-📋 Validando 3 arquivos modificados em services/ para segurança e lógica
-⏳ Processando...
-
-✅ Reviewer completou:
-   - Código validado: sem vulnerabilidades críticas
-   - Cobertura de testes: 82% (OK)
-   - Linha mais complexa: função X no arquivo Y (refatorar? recomendado)
-```
-
-**3. Planejamento (Planner Subagent)**
-```
-🤖 Subagente: Planner
-📋 Criando plano de implementação de autenticação JWT (4 fases)
-⏳ Processando...
-
-✅ Planner completou:
-   - Fase 1: Setup e models (2 dias)
-   - Fase 2: Endpoints de login/refresh (1 dia)
-   - Fase 3: Middleware e proteção de rotas (1 dia)
-   - Fase 4: Testes e documentação (1 dia)
-   - Plano completo atualizado em Memory Bank
-```
-
-**4. Análise de Bot Ecosystem (Debug Subagent para auditoria)**
-```
-🤖 Subagente: debug
-📋 Auditando todos 4 bots (alertas, ofertas, affiliate, username) em paralelo
-⏳ Processando... (análise complexa, ~3-5 min)
-
-✅ debug completou:
-   - alertas_bot: 5 issues críticas (race conditions, pool exhaustion)
-   - ofertas_bot: 4 high-priority issues (duplicate code, bare exceptions)
-   - affiliate_bot: 3 medium issues (AI fallback gaps, retry logic)
-   - username_bot: ✅ Saudável após fixes (85/100 score)
-```
-
-### Por Que Comunicar?
-
-- **Transparência**: Você sabe exatamente o que está acontecendo
-- **Rastreabilidade**: Fácil ver qual agent processou cada coisa
-- **Debugging**: Se algo der errado, sabemos onde procurar
-- **Performance**: Você acompanha progresso de tarefas longas
-- **Confiança**: Não é uma "caixa preta" — cada passo é visível
-
----
 
 ## 🎯 Padrões de Uso
+
+### Padrão 1: Simple Task (no subagent)
+- Files <300 lines
+- Single file changes
+- Quick verifications
+- **Use inline analysis**
+
+### Padrão 2: Complex Task (use subagent)
+- Files >500 lines total
+- >5 different files
+- Expected output >50 lines
+- Multiple parallel analyses
+- **Use subagents**
+
+## 🤖 Subagent Selection Matrix
+
+| Task Type | Primary | Secondary | Notes |
+|-----------|---------|-----------|-------|
+| Code Quality Audit | @backend | @reviewer | Architecture focus |
+| Security Review | @debug | @reviewer | Vulnerability focus |
+| Performance Analysis | @debug | @backend | Optimization focus |
+| Integration Testing | @backend | @debug | Compatibility focus |
+| Documentation Review | @reviewer | @backend | Completeness focus |
+
+**For detailed agent definitions, see [agents.md](../agents.md)**
+
+## 📋 Subagent Prompt Template
+
+```
+You are a specialist in [DOMAIN]. Analyze the following:
+
+FILES TO ANALYZE:
+- path/to/file1.py
+- path/to/file2.py
+
+FOCUS AREAS:
+1. [Specific area 1]
+2. [Specific area 2]
+
+REQUIREMENTS:
+- Return only critical findings with file:line references
+- No full file dumps
+- Prioritize by severity
+- Include effort estimates
+```
+
+## ⚠️ Context Window Management
+
+- **Before Analysis:** Check total file sizes
+- **During Analysis:** Use subagents for >300 lines
+- **After Analysis:** Summarize findings, don't dump full reports
+
+## 🔄 Integration Workflow
+
+**Recommended:**
+```
+@backend: Structure analysis
+  ↓
+@debug: Security & performance
+  ↓
+@planner: Prioritize & document
+  ↓
+@backend: Implement fixes
+  ↓
+@reviewer: Validate changes
+```
 
 ### Padrão 1: Simple Task (no subagent needed)
 ```
