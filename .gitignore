@@ -10,5 +10,15 @@ Thumbs.db
 *.backup
 *~
 
-# Instructions
-instructions/
+# Temporary reports & documentation
+*-REPORT-*.md
+*-AUDIT-*.md
+*-SUMMARY-*.md
+SECURITY-*.md
+IMPLEMENTATION-*.md
+BEFORE-AFTER-*.md
+INDEX.md
+
+# Scripts (caminhos absolutos, não versionados)
+sync-*.sh
+validate-*.sh
