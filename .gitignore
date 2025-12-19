@@ -9,3 +9,6 @@ Thumbs.db
 *.bak
 *.backup
 *~
+
+# Instructions
+/home/admin/.github/instructions
