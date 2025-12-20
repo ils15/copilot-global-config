@@ -22,3 +22,4 @@ INDEX.md
 # Scripts (caminhos absolutos, não versionados)
 sync-*.sh
 validate-*.sh
+copilot-instructions.md
