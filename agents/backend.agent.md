@@ -15,6 +15,7 @@ tools:
   - 'fetch'
   - 'githubRepo'
 infer: true
+skills: [engineering-standards, security-patterns, testing-patterns, memory-contract]
 handoffs:
   - label: "Review Changes"
     agent: Reviewer
@@ -27,10 +28,6 @@ handoffs:
   - label: "Update Docs"
     agent: Planner
     prompt: "Tarefa concluída. Atualizar Memory Bank com as mudanças."
-    send: false
-  - label: "Document Changes"
-    agent: Documentation
-    prompt: "Document the implemented changes with proper inline comments and Memory Bank updates."
     send: false
 ---
 
@@ -89,249 +86,234 @@ from typing import Optional
 from repositories.product_repository import ProductRepository
 
 class ProductService:
-    """
-    Business logic for product operations.
-    
-    Handles validation, transformations, and orchestration
-    between repositories and external services.
-    """
+    """Business logic for product operations"""
     
     def __init__(self, product_repo: ProductRepository):
         self.product_repo = product_repo
     
-    async def create_product(self, data: ProductCreate) -> Product:
+    async def create_product(
+        self, 
+        name: str, 
+        price: float
+    ) -> dict:
         """
-        Create new product with business validation.
+        Create new product with validation.
         
         Args:
-            data: Product creation data
-            
+            name: Product name (2-100 chars)
+            price: Product price (>0)
+        
         Returns:
-            Created product instance
-            
+            Created product dict with id
+        
         Raises:
-            ValueError: If product already exists
+            ValueError: If validation fails
         """
-        # Business validation
-        existing = await self.product_repo.find_by_name(data.name)
-        if existing:
-            raise ValueError(f"Product {data.name} already exists")
+        if not 2 <= len(name) <= 100:
+            raise ValueError("Product name must be 2-100 characters")
+        if price <= 0:
+            raise ValueError("Price must be greater than 0")
         
-        # Create with defaults
-        product = await self.product_repo.create(data)
-        
-        # Post-creation actions (cache, notifications, etc.)
-        await self._cache_product(product)
-        
-        return product
+        return await self.product_repo.create({"name": name, "price": price})
 ```
 
 ### 2. Repository Pattern
 
 ```python
 # repositories/product_repository.py
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
 from typing import Optional, List
 
 class ProductRepository:
-    """Data access layer for Product model."""
+    """Data access layer for products"""
     
-    def __init__(self, session: AsyncSession):
+    def __init__(self, session):
         self.session = session
     
-    async def find_by_id(self, product_id: int) -> Optional[Product]:
-        """Find product by ID with eager loading."""
-        stmt = (
-            select(Product)
-            .options(selectinload(Product.category))
-            .where(Product.id == product_id)
+    async def get_by_id(self, product_id: int) -> Optional[dict]:
+        """Fetch product by ID"""
+        result = await self.session.execute(
+            select(Product).where(Product.id == product_id)
         )
-        result = await self.session.execute(stmt)
-        return result.scalar_one_or_none()
+        product = result.scalars().first()
+        return product.dict() if product else None
     
-    async def list_paginated(
-        self, 
-        page: int, 
-        per_page: int
-    ) -> tuple[List[Product], int]:
-        """List products with pagination."""
-        # Count total
-        count_stmt = select(func.count(Product.id))
-        total = await self.session.scalar(count_stmt)
-        
-        # Fetch page
-        stmt = (
-            select(Product)
-            .offset((page - 1) * per_page)
-            .limit(per_page)
-        )
-        result = await self.session.execute(stmt)
-        products = result.scalars().all()
-        
-        return products, total
+    async def create(self, data: dict) -> dict:
+        """Create new product"""
+        product = Product(**data)
+        self.session.add(product)
+        await self.session.flush()
+        return product.dict()
 ```
 
-### 3. Router Pattern
+### 3. FastAPI Endpoint
 
 ```python
 # routers/products.py
-from fastapi import APIRouter, Depends, HTTPException, Query
-from typing import List
+from fastapi import APIRouter, HTTPException, status
+from services.product_service import ProductService
 
-router = APIRouter(prefix="/products", tags=["products"])
+router = APIRouter(prefix="/api/v1/products", tags=["products"])
 
-@router.get("/{product_id}", response_model=ProductResponse)
-async def get_product(
-    product_id: int,
+@router.post("/", status_code=status.HTTP_201_CREATED)
+async def create_product(
+    name: str,
+    price: float,
     service: ProductService = Depends(get_product_service)
-) -> ProductResponse:
-    """
-    Get product by ID.
-    
-    Args:
-        product_id: Product ID
-        service: Injected product service
-        
-    Returns:
-        Product details
-        
-    Raises:
-        HTTPException 404: Product not found
-    """
+) -> dict:
+    """Create new product"""
     try:
-        product = await service.get_by_id(product_id)
-        if not product:
-            raise HTTPException(404, "Product not found")
+        product = await service.create_product(name, price)
         return product
     except ValueError as e:
-        raise HTTPException(400, str(e))
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
+        )
+```
+
+## Core Patterns
+
+### Async/Await Pattern
+
+✅ **Always use async for I/O operations**:
+```python
+# ✅ CORRECT - Async database query
+async def get_user(self, user_id: int):
+    result = await self.session.execute(
+        select(User).where(User.id == user_id)
+    )
+    return result.scalars().first()
+
+# ✅ CORRECT - Async HTTP request
+async def fetch_external_data(self, url: str):
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            return await response.json()
+```
+
+### Error Handling
+
+```python
+# ✅ CORRECT - Specific exception handling
+async def delete_product(self, product_id: int):
+    try:
+        product = await self.product_repo.get_by_id(product_id)
+        if not product:
+            raise HTTPException(
+                status_code=404,
+                detail=f"Product {product_id} not found"
+            )
+        await self.product_repo.delete(product_id)
     except Exception as e:
-        logger.error(f"Error fetching product {product_id}: {e}")
-        raise HTTPException(500, "Internal server error")
+        logger.error(f"Delete error: {e}")
+        raise HTTPException(status_code=500, detail="Internal error")
 ```
 
-## Code Quality Standards
-
-### Mandatory Checks
-
-✅ **Type Hints**: All functions must have type hints
-✅ **Docstrings**: All public functions need docstrings
-✅ **Error Handling**: Try/except with proper logging
-✅ **Async/Await**: Use consistently for I/O operations
-✅ **Inline Comments**: Explain WHY, not just WHAT
-
-### Anti-Patterns to Avoid
-
-❌ **Monolithic Files**: >300 lines → refactor
-❌ **God Classes**: >10 methods → split responsibilities
-❌ **Sync in Async**: Never use blocking I/O in async code
-❌ **Raw SQL**: Use SQLAlchemy query builder
-❌ **Hardcoded Secrets**: Always use environment variables
-
-## Vault Secrets Integration
-
-**ALWAYS check Vault first for credentials:**
+### Input Validation (Pydantic)
 
 ```python
-# Reference: /docs/memory-bank-infrastructure/VAULT-SECRETS-STRUCTURE.md
+# ✅ CORRECT - Strong typing with Pydantic
+from pydantic import BaseModel, Field
 
-# Path convention: /secret/{service}/{credential_type}
-# Examples:
-# - shared/mariadb → database credentials
-# - shared/redis → cache credentials
-# - shared/ia/gemini → AI API keys
-# - api/affiliates/aliexpress → affiliate keys
+class ProductCreate(BaseModel):
+    name: str = Field(..., min_length=2, max_length=100)
+    price: float = Field(..., gt=0)
+    category: str = Field(default="uncategorized")
+
+@router.post("/")
+async def create_product(payload: ProductCreate):
+    # Payload automatically validated
+    return await service.create_product(payload.dict())
 ```
 
-## Port Allocation
+## Code Quality Standards (reference [engineering-standards skill](../skills/engineering-standards/README.md))
 
-**ALWAYS reference port allocation document:**
+- ✅ **SOLID Principles**: Single Responsibility, proper abstractions
+- ✅ **DRY**: No code duplication
+- ✅ **Type Hints**: All functions have type annotations
+- ✅ **Docstrings**: Every function has documentation
+- ✅ **Error Handling**: Comprehensive error coverage
+- ✅ **Async Patterns**: asyncio best practices
+- ✅ **Security**: See [security-patterns skill](../skills/security-patterns/README.md)
+
+## Testing (reference [testing-patterns skill](../skills/testing-patterns/README.md))
 
 ```python
-# Reference: /docs/memory-bank-infrastructure/QUICK-REFERENCE-PORTS.md
+# ✅ Unit tests with pytest
+@pytest.mark.asyncio
+async def test_create_product_success():
+    repo = MockProductRepository()
+    service = ProductService(repo)
+    
+    product = await service.create_product("Widget", 99.99)
+    
+    assert product["name"] == "Widget"
+    assert product["price"] == 99.99
 
-# OfertaChina Product: 3000-3999
-# - API: 3001 (external) / 8000 (internal)
-# - Redis: 3379
-
-# Use environment variables:
-PORT = int(os.getenv("API_PORT", 8000))
+@pytest.mark.asyncio
+async def test_create_product_invalid_name():
+    repo = MockProductRepository()
+    service = ProductService(repo)
+    
+    with pytest.raises(ValueError):
+        await service.create_product("A", 99.99)  # Too short
 ```
 
-## Validation & Self-Review
+## Constraints
 
-Before marking work complete:
-
-1. ✅ **Syntax Check**: `python -m compileall <file.py>`
-2. ✅ **Type Check**: `mypy <file.py>`
-3. ✅ **Read All Changes**: Review every modified line
-4. ✅ **Inline Docs**: All functions documented
-5. ✅ **Error Handling**: Edge cases covered
-6. ✅ **Import Check**: All imports resolve
-
-## Subagent Usage
-
-Use `runSubagent` when:
-- Analyzing >3 files for patterns
-- Validating changes >200 lines
-- Complex refactoring requiring review
-
-**Return only**: Summary + critical issues + file paths
-
-## Hot Reload Pattern
-
-For quick iterations without full rebuild:
-
-```bash
-# Copy changed file to running container
-docker cp services/product_service.py ofertachina-api:/app/services/
-
-# Restart container (triggers reload)
-docker restart ofertachina-api && sleep 15
-
-# Verify health
-curl -s http://localhost:3001/health | jq .
-```
-
-**Use when**: Making small changes to Python files
-**DON'T use when**: Adding dependencies or changing Dockerfile
-
-## Required Reading
-
-- `~/.github/instructions/copilot-instructions.md` - Code quality rules
-- `~/.github/instructions/project-context.instructions.md` - Architecture
-- `/docs/memory-bank-infrastructure/VAULT-SECRETS-STRUCTURE.md` - Vault secrets
+- **File Size**: Keep files <300 lines (break into separate modules)
+- **Function Size**: Keep functions <50 lines
+- **Memory**: Use [memory-contract skill](../skills/memory-contract/README.md) for context
+- **Security**: Reference [security-patterns skill](../skills/security-patterns/README.md)
+- **Async**: Always async for I/O, never block
 
 ## Handoff Pattern
 
 ```
-User Request → @backend (implement)
-              ↓
-         Code Complete
-              ↓
-         @reviewer (validation)
-              ↓
-         @planner (update Memory Bank)
+@planner (plan) 
+  → @backend (implement) 
+    → @reviewer (validate) 
+      → @database (migrations) 
+        → @planner (Memory Bank update)
 ```
 
-For database changes: @backend → @database → @backend
+## Memory Bank Integration
 
-## Example Workflow
-
-```
-Task: "Add product search endpoint with filters"
-
-1. Analyze existing code structure
-2. Create router: routers/products.py
-3. Create service: services/product_search_service.py
-4. Add repository method: repositories/product_repository.py
-5. Define schemas: schemas/product.py
-6. Self-review all changes
-7. Handoff to @reviewer
-8. After approval, handoff to @planner for docs
-```
+- Read `04-active-context.md` for current focus
+- Read `05-progress-log.md` for recent implementations
+- Store decisions in Memory Bank after implementation
 
 ---
 
-**Remember**: Write SIMPLE, READABLE code with comprehensive inline documentation. Async patterns for all I/O. Always reference Vault for secrets.
+**Key Principle**: Write simple, readable, well-tested code that's easy for others to maintain.
+
+
+## Constraints
+
+### Escalation Framework
+
+Before escalating issues, classify by urgency level:
+
+- **IMMEDIATE (< 1 hour)**: Critical blocker, security vulnerability, plan flaw
+  - Escalate to: Roadmap or Critic
+
+- **SAME-DAY (< 4 hours)**: Technical unknowns, need guidance
+  - Escalate to: Analyst or Architect
+
+- **PLAN-LEVEL (< 24 hours)**: Requirements need clarification, scope shifted
+  - Escalate to: Planner
+
+- **PATTERN (3+ occurrences)**: Process needs improvement
+  - Escalate to: ProcessImprovement
+
+
+## Constraints
+
+### Escalation Framework
+
+Before escalating issues, classify by urgency level:
+
+- **IMMEDIATE (< 1h)**: Critical blocker, security vulnerability, plan flaw → Escalate to: Roadmap or Critic
+- **SAME-DAY (< 4h)**: Technical unknowns, need guidance → Escalate to: Analyst or Architect
+- **PLAN-LEVEL (< 24h)**: Requirements clarification, scope shift → Escalate to: Planner
+- **PATTERN (3+ times)**: Process improvement → Escalate to: ProcessImprovement

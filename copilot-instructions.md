@@ -94,6 +94,75 @@ After changes:
 
 ---
 
+## 📚 Skills Framework (NEW - PHASE 1)
+
+All agents reference reusable **skill modules** for consistency:
+
+| Skill | Purpose | Used By |
+|-------|---------|---------|
+| **architecture-patterns** | System design, trade-offs, anti-patterns | architect, critic, analyst |
+| **code-review-checklist** | Code quality standards, review process | reviewer, qa, backend, frontend, database |
+| **engineering-standards** | SOLID, DRY, YAGNI, code organization | ALL agents |
+| **memory-contract** | Memory Bank API, memory usage patterns | MANDATORY all agents |
+| **release-procedures** | SemVer, changelog, deployment strategies | devops, github, docker, infra |
+| **security-patterns** | CIA Triad, OWASP, STRIDE, secure coding | security, backend, frontend, database, reviewer |
+| **testing-patterns** | Test pyramid, TDD, test coverage | qa, reviewer, backend, frontend, debug |
+
+**How to Use**: When a task requires deep knowledge of a pattern, refer to the relevant skill module.
+
+Example: "I need to review code for security issues → Check `security-patterns` skill"
+
+---
+
+## 🚨 Escalation Framework (NEW - PHASE 3)
+
+All 26 agents now support structured escalation. Before escalating:
+
+**IMMEDIATE (< 1 hour)**
+- Critical blocker preventing work
+- Security vulnerability found
+- Plan has fundamental flaw
+- Escalate to: **Roadmap** or **Critic**
+
+**SAME-DAY (< 4 hours)**
+- Technical unknowns requiring research
+- Need architectural guidance
+- Escalate to: **Analyst** or **Architect**
+
+**PLAN-LEVEL (< 24 hours)**
+- Plan is incomplete or outdated
+- Requirements need clarification
+- Escalate to: **Planner**
+
+**PATTERN (3+ occurrences)**
+- Same issue appears multiple times
+- Process needs improvement
+- Escalate to: **ProcessImprovement**
+
+---
+
+## 🔄 Two-Stage Release Workflow (NEW - PHASE 3)
+
+Release process now separated into 2 stages:
+
+**Stage 1: PRE-RELEASE VALIDATION (24h before)**
+- @docker: Build images + security scan
+- @infra: Deploy to staging + smoke tests
+- @qa: Full test suite + performance baseline
+- @reviewer: Final code review + changelog validation
+
+**Stage 2: RELEASE EXECUTION (if Stage 1 ✅)**
+- @github: Create release tag + notes
+- @docker: Push images to registry
+- @devops: Blue-Green or Canary deployment
+- @infra: Monitor health + alert on issues
+
+**Rollback**: If Stage 2 fails, immediate traffic shift back to previous version.
+
+See [devops.agent.md](/.github/agents/devops.agent.md) for full workflow.
+
+---
+
 ## 🔀 Handoff Chain Example (Full Feature)
 
 ```

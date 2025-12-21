@@ -2,7 +2,7 @@
 description: "SQL, Alembic migrations, query optimization, schemas"
 name: "Database"
 argument-hint: "Describe the schema, migration, or query to create/optimize"
-model: Claude Sonnet 4.5 (copilot)
+model: Claude Sonnet 4.5
 tools: 
   - 'edit/editFiles'
   - 'search'
@@ -10,7 +10,7 @@ tools:
   - 'runCommands'
   - 'problems'
   - 'runSubagent'
-infer: true
+skills: [code-review-checklist, engineering-standards, testing-patterns]
 handoffs:
   - label: "Implement Repository"
     agent: Backend
@@ -449,3 +449,30 @@ User Request → @database (migration)
 ---
 
 **Remember**: Always use Vault for credentials, create reversible migrations, optimize queries with indexes, never hardcode secrets.
+
+
+### Escalation Framework
+
+Before escalating issues, classify by urgency level:
+
+**IMMEDIATE (< 1 hour)**: Critical blocker preventing work
+  → Critical blocker preventing work
+  → Security vulnerability found
+  → Plan has fundamental flaw
+  → Escalate to: Roadmap or Critic agent
+
+**SAME-DAY (< 4 hours)**: Technical unknowns requiring research
+  → Uncertainty about implementation approach
+  → Need architectural guidance
+  → Escalate to: Analyst or Architect agent
+
+**PLAN-LEVEL (< 24 hours)**: Plan incomplete or needs revision
+  → Requirements need clarification
+  → Scope has shifted
+  → Escalate to: Planner agent
+
+**PATTERN (Pattern-based)**: Same issue appears 3+ times
+  → Process needs improvement
+  → Workflow not working well
+  → Escalate to: ProcessImprovement agent
+

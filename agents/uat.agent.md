@@ -3,6 +3,7 @@ description: User Acceptance Testing specialist verifying implementation deliver
 name: UAT
 tools: ['edit', 'search', 'runCommands', 'problems', 'changes', 'testFailure', 'fetch', 'flowbaby.flowbaby/flowbabyStoreSummary', 'flowbaby.flowbaby/flowbabyRetrieveMemory', 'todos']
 model: Claude Sonnet 4.5
+skills: [code-review-checklist, testing-patterns]
 handoffs:
   - label: Report UAT Failure
     agent: Planner
@@ -187,3 +188,30 @@ Escalation:
 - **IMMEDIATE**: Critical value gaps discovered
 - **SAME-DAY**: Value delivery concerns needing clarification
 - **BLOCKED**: UAT cannot proceed (QA not complete, implementation not deployed)
+
+
+### Escalation Framework
+
+Before escalating issues, classify by urgency level:
+
+**IMMEDIATE (< 1 hour)**: Critical blocker preventing work
+  → Critical blocker preventing work
+  → Security vulnerability found
+  → Plan has fundamental flaw
+  → Escalate to: Roadmap or Critic agent
+
+**SAME-DAY (< 4 hours)**: Technical unknowns requiring research
+  → Uncertainty about implementation approach
+  → Need architectural guidance
+  → Escalate to: Analyst or Architect agent
+
+**PLAN-LEVEL (< 24 hours)**: Plan incomplete or needs revision
+  → Requirements need clarification
+  → Scope has shifted
+  → Escalate to: Planner agent
+
+**PATTERN (Pattern-based)**: Same issue appears 3+ times
+  → Process needs improvement
+  → Workflow not working well
+  → Escalate to: ProcessImprovement agent
+

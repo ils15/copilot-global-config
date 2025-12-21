@@ -3,6 +3,7 @@ description: Captures lessons learned, architectural decisions, and patterns aft
 name: Retrospective
 tools: ['edit/createFile', 'search', 'usages', 'changes', 'fetch', 'githubRepo', 'flowbaby.flowbaby/flowbabyStoreSummary', 'flowbaby.flowbaby/flowbabyRetrieveMemory', 'todos']
 model: Gemini 3 Pro (Preview)
+skills: [architecture-patterns, memory-contract]
 handoffs:
   - label: Update Architecture
     agent: Architect
@@ -104,3 +105,30 @@ Part of structured workflow: planner → analyst → critic → architect → im
 - Recommend workflow improvements
 - Update documentation based on lessons
 - Build collective knowledge
+
+
+### Escalation Framework
+
+Before escalating issues, classify by urgency level:
+
+**IMMEDIATE (< 1 hour)**: Critical blocker preventing work
+  → Critical blocker preventing work
+  → Security vulnerability found
+  → Plan has fundamental flaw
+  → Escalate to: Roadmap or Critic agent
+
+**SAME-DAY (< 4 hours)**: Technical unknowns requiring research
+  → Uncertainty about implementation approach
+  → Need architectural guidance
+  → Escalate to: Analyst or Architect agent
+
+**PLAN-LEVEL (< 24 hours)**: Plan incomplete or needs revision
+  → Requirements need clarification
+  → Scope has shifted
+  → Escalate to: Planner agent
+
+**PATTERN (Pattern-based)**: Same issue appears 3+ times
+  → Process needs improvement
+  → Workflow not working well
+  → Escalate to: ProcessImprovement agent
+
