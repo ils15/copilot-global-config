@@ -2,7 +2,7 @@
 description: "React, TypeScript, Next.js, UI components, hooks"
 name: "Frontend"
 argument-hint: "Describe the React component or TypeScript feature to implement"
-model: Claude Haiku 4.5 (copilot)
+model: Gemini 3 Flash (Preview) (copilot)
 tools: 
   - 'edit/editFiles'
   - 'search'

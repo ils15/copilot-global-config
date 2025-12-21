@@ -2,7 +2,8 @@
 description: "Docker, nginx, Traefik, deployment, hot reload, VPS"
 name: "Infra"
 argument-hint: "Describe the Docker, nginx, Traefik, or deployment task"
-model: Claude Haiku 4.5 (copilot)
+model: Gemini 3 Flash (Preview) (copilot)
+
 tools: 
   - 'edit/editFiles'
   - 'search'
