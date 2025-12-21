@@ -1,6 +1,7 @@
 ---
 description: System architecture and design decisions for Ofertasdachina platform
 name: Architect
+model: Claude Opus 4.5 (Preview)
 tools: ['read_file', 'edit', 'search', 'semantic_search', 'grep_search', 'list_code_usages']
 handoffs:
   - label: Request Analysis

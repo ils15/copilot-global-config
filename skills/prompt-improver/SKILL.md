@@ -1,3 +1,8 @@
+---
+name: prompt-improver
+description: Improve prompts for AI agents and Telegram bots using OpenAI's prompt engineering best practices. Analyzes clarity, specificity, context, and output format. Returns structured improvements.
+---
+
 # Prompt Improver Skill
 
 **Version:** 1.0  

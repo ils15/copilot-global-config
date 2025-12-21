@@ -82,6 +82,60 @@ Result back to Main Chat
 
 **For detailed agent definitions, see [agents.md](../agents.md)**
 
+## 📋 Available Subagents (26 Total)
+
+All subagents located in `/.github/agents/*.agent.md`:
+
+### Strategic Agents (Use for planning/design)
+| Agent | Model | Purpose |
+|-------|-------|---------|
+| `@roadmap` | Opus 4.5 | Product vision, epic validation |
+| `@architect` | Opus 4.5 | System design, trade-offs |
+| `@critic` | Sonnet 4.5 | Plan review, pre-implementation validation |
+| `@security` | Opus 4.5 | Security audit, vulnerability assessment |
+
+### Core Development Agents
+| Agent | Model | Purpose |
+|-------|-------|---------|
+| `@backend` | Haiku 4.5 | FastAPI, Python, async, services |
+| `@frontend` | Gemini 3 Flash | React, TypeScript, Next.js, UI |
+| `@database` | Sonnet 4.5 | SQL, Alembic, migrations |
+| `@infra` | Gemini 3 Flash | Docker, Traefik, nginx, deployment |
+| `@docker` | Haiku 4.5 | Images, containers, registries |
+| `@implementer` | Opus 4.5 | Full implementation per approved plan |
+
+### Quality Agents
+| Agent | Model | Purpose |
+|-------|-------|---------|
+| `@reviewer` | Sonnet 4.5 | Code review, validation, Playwright |
+| `@qa` | GPT-5.1 | Test coverage, test execution |
+| `@uat` | Sonnet 4.5 | User acceptance testing |
+| `@debug` | Sonnet 4.5 | Bug investigation, root cause |
+| `@cleanup` | Sonnet 4.5 | Remove temp code, orphans |
+
+### Operations Agents
+| Agent | Model | Purpose |
+|-------|-------|---------|
+| `@github` | Haiku 4.5 | Git operations, commits, PRs |
+| `@linux` | Haiku 4.5 | Bash scripting, system admin |
+| `@devops` | GPT-5 mini | Packaging, versioning, releases |
+
+### Specialty Agents
+| Agent | Model | Purpose |
+|-------|-------|---------|
+| `@telegramui` | Sonnet 4.5 | Telegram bot UI/UX, keyboards |
+| `@webui` | Sonnet 4.5 | Web interface analysis, a11y |
+| `@documentation` | Grok Code Fast | Memory Bank, API docs |
+
+### Process Agents
+| Agent | Model | Purpose |
+|-------|-------|---------|
+| `@planner` | Opus 4.5 | Feature planning, Memory Bank |
+| `@analyst` | GPT-5.1 Codex | Research, pre-implementation |
+| `@memory` | GPT-5.1 Codex | Context retrieval, milestones |
+| `@processimprovement` | GPT-5.1 Codex | Workflow optimization |
+| `@retrospective` | Gemini 3 Pro | Lessons learned, patterns |
+
 ## 📋 Subagent Prompt Template
 
 ```

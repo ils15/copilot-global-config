@@ -1,6 +1,7 @@
 ---
 description: Pre-implementation plan review and validation specialist
 name: Critic
+model: Claude Sonnet 4.5
 tools: ['read_file', 'search', 'semantic_search', 'grep_search']
 handoffs:
   - label: Request Revision

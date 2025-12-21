@@ -165,6 +165,37 @@ frontend/src/
 
 ---
 
+## 🤐 Output Rules (MANDATORY - Anti-Verbosity)
+
+### RULE A: Never Use `cat` in Responses
+❌ **NEVER**: `cat file.txt` or paste full file content  
+✅ **INSTEAD**: Use `file:line-range` reference format
+
+### RULE B: Concise Reporting Only
+❌ **NEVER**: 20-line status report with full paths  
+✅ **INSTEAD**: Bullet points max 5 items, 1 line each
+
+### RULE C: No Output Dumps
+❌ **NEVER**: Paste JSON/logs/test output  
+✅ **INSTEAD**: `Test results: 24/24 passing ✅`
+
+### RULE D: Use Reference Format Always
+✅ **ONLY**: `backend/services/auth.py:45-78 (JWT validation)`  
+❌ **NEVER**: Paste 50 lines of actual code
+
+### RULE E: Clean Summary Template
+Every response ends with:
+```
+📊 SUMMARY
+- ✅ [What was done]
+- 📝 [Files modified: count]
+- 🔗 [Next: agent or action]
+```
+
+**VIOLATIONS TO AVOID**: Long explanations, code dumps, debug output, introductions
+
+---
+
 ## 📊 Quality Checklist (Before Completion)
 
 - [ ] Code follows all core rules
@@ -176,6 +207,7 @@ frontend/src/
 - [ ] Memory Bank updated (if complex task)
 - [ ] No unnecessary .md files created
 - [ ] Edge cases considered
+- [ ] Output Rules followed (RULE A-E)
 
 ---
 

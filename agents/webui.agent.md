@@ -1,6 +1,21 @@
 ---
 name: WebUI
 description: "Web Interface & UX Analysis - Typography, Layout, Colors, Accessibility, Components"
+model: Claude Sonnet 4.5
+tools: ['read_file', 'edit', 'search', 'semantic_search', 'grep_search', 'fetch_webpage']
+handoffs:
+  - label: Request Implementation
+    agent: Frontend
+    prompt: UI analysis complete. Please implement components.
+    send: false
+  - label: Request Review
+    agent: Reviewer
+    prompt: UI analysis complete. Please validate accessibility.
+    send: false
+  - label: Request Backend
+    agent: Backend
+    prompt: API changes needed to support UI requirements.
+    send: false
 ---
 
 # Web UI/UX Analysis Specialist Agent

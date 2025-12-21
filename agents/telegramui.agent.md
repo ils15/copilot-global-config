@@ -1,6 +1,21 @@
 ---
 name: TelegramUI
 description: "Telegram Bot Interface Design - Keyboards, User Experience, Conversational Flow"
+model: Claude Sonnet 4.5
+tools: ['read_file', 'edit', 'search', 'semantic_search', 'grep_search']
+handoffs:
+  - label: Request Implementation
+    agent: Backend
+    prompt: UI design approved. Please implement bot handlers.
+    send: false
+  - label: Request Review
+    agent: Reviewer
+    prompt: UI design complete. Please validate usability.
+    send: false
+  - label: Request Frontend
+    agent: Frontend
+    prompt: Web UI needed for bot admin panel.
+    send: false
 ---
 
 # Telegram UI/UX Specialist Agent

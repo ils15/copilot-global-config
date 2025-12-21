@@ -1,3 +1,8 @@
+---
+name: frontend-analyzer
+description: Analyze React/Next.js components to extract typography, colors, layout, fonts, spacing systems, and design tokens. Identifies accessibility issues, responsive breakpoints, and component hierarchies.
+---
+
 # Frontend Analyzer
 
 Analisa e identifica tipografia, cores, layout, fontes e elementos de design system em componentes frontend.

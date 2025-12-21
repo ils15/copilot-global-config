@@ -1,6 +1,7 @@
 ---
 description: Security audit and vulnerability assessment for Ofertasdachina platform
 name: Security
+model: Claude Opus 4.5 (Preview)
 tools: ['read_file', 'search', 'semantic_search', 'grep_search', 'list_code_usages']
 handoffs:
   - label: Request Analysis
