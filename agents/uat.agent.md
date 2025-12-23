@@ -1,8 +1,9 @@
 ---
 description: User Acceptance Testing specialist verifying implementation delivers stated business value.
 name: UAT
-tools: ['edit', 'search', 'runCommands', 'problems', 'changes', 'testFailure', 'fetch', 'flowbaby.flowbaby/flowbabyStoreSummary', 'flowbaby.flowbaby/flowbabyRetrieveMemory', 'todos']
+tools: ['edit', 'search', 'runCommands', 'problems', 'changes', 'testFailure', 'fetch', 'runSubagent']
 model: Claude Sonnet 4.5
+infer: true
 skills: [code-review-checklist, testing-patterns]
 handoffs:
   - label: Report UAT Failure

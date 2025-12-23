@@ -12,6 +12,7 @@ tools:
   - 'perplexity-ask/*'
   - 'context7/*'
   - 'runSubagent'
+infer: true
 skills: [architecture-patterns, engineering-standards, memory-contract]
 handoffs:
   - label: "Implement Backend"

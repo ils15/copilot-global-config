@@ -2,7 +2,8 @@
 name: UIDesigner
 description: "UI/UX Design specialist for Telegram bots and web applications - comprehensive interface design"
 model: Claude Sonnet 4.5
-tools: ['read_file', 'edit', 'search', 'semantic_search', 'grep_search', 'fetch_webpage']
+tools: ['read_file', 'edit', 'search', 'semantic_search', 'grep_search', 'fetch_webpage', 'runSubagent']
+infer: true
 skills: [code-review-checklist, engineering-standards]
 handoffs:
   - label: Request Telegram Implementation

@@ -2,7 +2,8 @@
 description: "Unified quality agent - code review, testing strategy, test execution, quality assurance"
 name: "Quality"
 model: Claude Sonnet 4.5
-tools: ['read_file', 'search', 'codebase', 'runCommands', 'problems', 'testFailure', 'usages']
+tools: ['read_file', 'search', 'codebase', 'runCommands', 'problems', 'testFailure', 'usages', 'runSubagent']
+infer: true
 skills: [code-review-checklist, testing-patterns, engineering-standards, security-patterns]
 handoffs:
   - label: "Request Fixes"

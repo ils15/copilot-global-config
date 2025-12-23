@@ -307,6 +307,66 @@ test('calls onAdd when button clicked', async () => {
 
 **Key Principle**: Build accessible, performant, type-safe components that users love to interact with.
 
+---
+
+## 🌐 External URL Testing (Production Verification)
+
+**CRITICAL**: All frontend changes MUST be tested on the EXTERNAL production URL before marking complete.
+
+### Using Playwright MCP for Production Testing
+
+The Playwright MCP tools provide `mcp_playwright_browser_navigate` to test against external domains:
+
+```javascript
+// Example: Test product detail page on production
+await page.goto('https://ofertachina.cloud/produto/eletronicos/drone-dji-mini-3-pro');
+
+// Verify data loads correctly
+const priceText = await page.textContent('[data-testid="product-price"]');
+const productName = await page.textContent('h1');
+
+// Check for error states
+const hasError = await page.locator('text=Error').isVisible();
+```
+
+### Testing Workflow
+
+1. **Build & Deploy** frontend to staging/production container
+2. **Navigate** to external URL using Playwright: `mcp_playwright_browser_navigate(url)`
+3. **Wait for Data**: Allow 3-5 seconds for API calls to complete
+4. **Verify Elements**: Check critical elements display correctly
+5. **Check Console**: Use `mcp_playwright_browser_console_messages()` for errors
+6. **Test Interactions**: Click buttons, fill forms, verify navigation
+
+### Example: Product Page Navigation
+
+```typescript
+// ✅ Complete example from real testing
+// 1. Navigate to external URL
+await page.goto('https://ofertachina.cloud/produto/eletronicos/drone-dji-mini-3-pro');
+
+// 2. Wait for content to load
+await page.waitForTimeout(4000);
+
+// 3. Verify product data displays
+const hasPrice = await page.textContent('body').includes('R$ 280,00');
+const hasProductName = await page.textContent('body').includes('Drone DJI Mini 3 Pro');
+
+// 4. Check for API errors
+const hasError = await page.textContent('body').includes('Error');
+
+return { hasPrice, hasProductName, hasError };
+```
+
+### Important Notes
+
+- **Always test EXTERNAL URLs** (https://ofertachina.cloud), not localhost
+- **Wait for async data loading** (use waitForTimeout or waitForSelector)
+- **Check both success AND error states**
+- **Verify API responses** via browser network logs
+- **Document in commit message**: "Tested on external URL: [URL]"
+
+---
 
 ## Constraints
 
@@ -325,15 +385,3 @@ Before escalating issues, classify by urgency level:
 
 - **PATTERN (3+ occurrences)**: Process needs improvement
   - Escalate to: ProcessImprovement
-
-
-## Constraints
-
-### Escalation Framework
-
-Before escalating issues, classify by urgency level:
-
-- **IMMEDIATE (< 1h)**: Critical blocker, security vulnerability, plan flaw → Escalate to: Roadmap or Critic
-- **SAME-DAY (< 4h)**: Technical unknowns, need guidance → Escalate to: Analyst or Architect
-- **PLAN-LEVEL (< 24h)**: Requirements clarification, scope shift → Escalate to: Planner
-- **PATTERN (3+ times)**: Process improvement → Escalate to: ProcessImprovement

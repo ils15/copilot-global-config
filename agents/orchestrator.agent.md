@@ -3,6 +3,7 @@ description: "Workflow orchestrator - manages feature lifecycle, agent coordinat
 name: "Orchestrator"
 model: Claude Opus 4.5
 tools: ['read_file', 'search', 'codebase', 'runCommands', 'runSubagent']
+infer: true
 skills: [release-procedures, memory-contract, engineering-standards]
 handoffs:
   - label: "Create Plan"

@@ -1,8 +1,9 @@
 ---
 description: Captures lessons learned, architectural decisions, and patterns after implementation completes.
 name: Retrospective
-tools: ['edit/createFile', 'search', 'usages', 'changes', 'fetch', 'githubRepo', 'flowbaby.flowbaby/flowbabyStoreSummary', 'flowbaby.flowbaby/flowbabyRetrieveMemory', 'todos']
+tools: ['edit/createFile', 'search', 'usages', 'changes', 'fetch', 'githubRepo', 'runSubagent']
 model: Gemini 3 Pro (Preview)
+infer: true
 skills: [architecture-patterns, memory-contract]
 handoffs:
   - label: Update Architecture

@@ -2,7 +2,8 @@
 description: Product vision and epic validation for Ofertasdachina platform
 name: Roadmap
 model: Claude Opus 4.5 (Preview)
-tools: ['read_file', 'edit', 'search', 'semantic_search', 'grep_search']
+tools: ['read_file', 'edit', 'search', 'semantic_search', 'grep_search', 'runSubagent']
+infer: true
 skills: [architecture-patterns, memory-contract]
 handoffs:
   - label: Request Planning

@@ -3,7 +3,8 @@ description: "Infrastructure & DevOps - Docker, Traefik, deployment, versioning,
 name: "Infra"
 argument-hint: "Describe the Docker, Traefik, deployment, Linux, Git, or release task"
 model: Claude Haiku 4.5
-tools: ['read_file', 'edit', 'search', 'runCommands']
+tools: ['read_file', 'edit', 'search', 'runCommands', 'runSubagent']
+infer: true
 skills: [release-procedures, security-patterns, engineering-standards]
 handoffs:
   - label: "Deploy to Staging"

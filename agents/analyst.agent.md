@@ -3,6 +3,7 @@ description: "Investigation specialist - root cause analysis, pre-implementation
 name: "Analyst"
 model: Claude Sonnet 4.5
 tools: ['edit/createFile', 'edit/editFiles', 'runNotebooks', 'search', 'codebase', 'usages', 'vscodeAPI', 'problems', 'fetch', 'testFailure', 'runCommands', 'changes', 'runSubagent']
+infer: true
 skills: [code-review-checklist, engineering-standards, testing-patterns]
 handoffs:
   - label: "Create Plan"

@@ -2,7 +2,8 @@
 description: "System architecture and design decisions - patterns, trade-offs, performance, API design"
 name: "Architect"
 model: Claude Opus 4.5
-tools: ['read_file', 'search', 'semantic_search', 'grep_search']
+tools: ['read_file', 'search', 'semantic_search', 'grep_search', 'runSubagent']
+infer: true
 skills: [architecture-patterns, security-patterns, engineering-standards]
 handoffs:
   - label: "Create Plan"

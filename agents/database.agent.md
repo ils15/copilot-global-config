@@ -10,6 +10,7 @@ tools:
   - 'runCommands'
   - 'problems'
   - 'runSubagent'
+infer: true
 skills: [code-review-checklist, engineering-standards, testing-patterns]
 handoffs:
   - label: "Implement Repository"
