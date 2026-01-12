@@ -5,7 +5,20 @@ description: 'Core Rules - Fundamental planning, documentation, and task managem
 
 # Core Rules - Ofertasdachina Platform
 
-## 1. PLANNING RULES (from [copilot-instructions.md](copilot-instructions.md))
+## 0. CODE QUALITY EXECUTION (NEW - v3.0)
+
+**4 REGRAS CRÍTICAS OBRIGATÓRIAS:**
+
+- Rule 0.1: @Quality subagent ALWAYS after code changes (every file, every feature)
+- Rule 0.2: Use specialized subagent to evaluate generated code (@Backend for Python, @Frontend for TS/React, etc)
+- Rule 0.3: Research best practices BEFORE coding (grep_search → @Architect → @Analyst → document)
+- Rule 0.4: Remove backward compatibility & legacy code with EVERY modification (checklist required)
+
+**See**: `/home/admin/website/copilot-instructions.md` for detailed workflow
+
+---
+
+## 1. PLANNING RULES (from copilot-execution.instructions.md)
 
 - Rule 1.1: Always create INTERNAL IMPLEMENTATION PLAN before coding
 - Rule 1.2: Plan structure: GOAL (1 sentence), SCOPE (files/functions), JUSTIFICATION (1 line), RISKS (if any), STEPS (numbered list)
@@ -16,7 +29,7 @@ description: 'Core Rules - Fundamental planning, documentation, and task managem
 - Rule 1.7: After implementation, review all modified code for correctness and documentation
 - Rule 1.8: Execute immediately after plan (no approval needed)
 
-## 2. DOCUMENTATION RULES (from [no-unnecessary-files.instructions.md](no-unnecessary-files.instructions.md))
+## 2. DOCUMENTATION RULES
 
 - Rule 2.1: NEVER create .md files automatically (README.md, GUIDE.md, TUTORIAL.md, CHANGELOG.md, NOTES.md, SUMMARY.md)
 - Rule 2.2: NEVER create SESSION-SUMMARY.md, CONSOLIDADO.md, FINAL.md, STATUS.md after conversations
