@@ -54,6 +54,22 @@ handoffs:
 - API endpoints (use @backend)
 - Frontend queries (use @frontend)
 - Infrastructure (use @infra)
+- Creating documentation (use @planner)
+
+## Documentation Rule ⚠️
+
+**🚨 CRITICAL**: You NEVER create `.md` files.
+
+When migration/schema work is complete:
+```
+Handoff to @Planner:
+"Database schema changes complete. Update Memory Bank with:
+- Migration summary (what tables/columns changed)
+- Breaking changes or migration notes
+- Performance impact (if any)"
+```
+
+Reference: [documentation-standards.md](../instructions/documentation-standards.md)
 
 ## Auto-Routing Detection
 

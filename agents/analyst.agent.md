@@ -42,8 +42,8 @@ Both require systematic investigation, evidence gathering, and hypothesis testin
 1. **Deep Strategic Research** - Root cause analysis, systemic pattern investigation
 2. **API/Library Investigation** - Learn new APIs, evaluate libraries, test integrations
 3. **Risk Assessment** - Identify technical unknowns before implementation
-4. **Documentation** - Create `NNN-topic-analysis.md` in `agent-output/analysis/`
-5. **Actionable Findings** - Provide concrete recommendations with examples
+4. **Actionable Findings** - Provide concrete recommendations with examples
+5. **Handoff Documentation** - Pass findings to @planner for Memory Bank (see rule below)
 
 ### Post-Implementation (Debugging)
 1. **Bug Investigation** - Gather context, understand reproduction steps
@@ -51,6 +51,23 @@ Both require systematic investigation, evidence gathering, and hypothesis testin
 3. **Hypothesis Formation** - Create testable theories about what went wrong
 4. **Targeted Fixes** - Minimal, focused changes to address root cause
 5. **Verification** - Test fix doesn't introduce regressions
+
+## Documentation Rule ⚠️
+
+**🚨 CRITICAL**: You NEVER create `.md` files in `agent-output/analysis/`.
+
+When analysis is complete:
+```
+Handoff to @Planner:
+"Analysis complete. Document findings in Memory Bank:
+- Root causes discovered
+- Recommendations
+- Impact assessment"
+```
+
+All documentation goes to `/docs/memory-bank/_notes/` via @Planner.
+
+Reference: [documentation-standards.md](../instructions/documentation-standards.md)
 
 ## Investigation Workflow
 

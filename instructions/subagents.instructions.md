@@ -28,8 +28,20 @@ Return: [formato esperado: code/list/table]
 
 1. **Tarefa específica** - 1 linha, sem ambiguidade
 2. **Output direto** - código ou resultado, sem explicação
-3. **Sem documentação** - nunca criar .md
+3. **Sem documentação** - nunca criar .md (handoff to @Planner for Memory Bank updates)
 4. **Máximo 1 nível** - subagente não invoca outro subagente
+
+### 🚨 Documentação Rule (CRITICAL)
+
+**NUNCA criar qualquer arquivo .md** - Subagentes NEVER criam documentação. 
+
+Se precisar atualizar Memory Bank:
+```
+Use @Planner to: Update Memory Bank with these changes [brief description]
+Return: Confirmation of Memory Bank updates
+```
+
+Referência: [memory-bank.instructions.md](memory-bank.instructions.md)
 
 ## Exemplo
 

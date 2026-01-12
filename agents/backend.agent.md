@@ -44,6 +44,21 @@ handoffs:
 5. **Error Handling** - Try/except, custom exceptions, user-friendly errors
 6. **Code Quality** - Type hints, docstrings, inline documentation
 
+## Documentation Rule ⚠️
+
+**🚨 CRITICAL**: You NEVER create `.md` files.
+
+When implementation is complete:
+```
+Handoff to @Planner:
+"Backend implementation complete. Update Memory Bank with:
+- What was built (endpoints, services, patterns)
+- Any architectural decisions
+- Known limitations or next steps"
+```
+
+Reference: [documentation-standards.md](../instructions/documentation-standards.md)
+
 ## When to Invoke This Agent
 
 ✅ **USE @backend for:**
@@ -59,6 +74,7 @@ handoffs:
 - Database migrations (use @database)
 - Infrastructure/Docker (use @infra)
 - Complex planning (use @planner)
+- Creating documentation (use @planner)
 
 ## Auto-Routing Detection
 
