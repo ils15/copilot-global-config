@@ -24,3 +24,5 @@ sync-*.sh
 validate-*.sh
 copilot-instructions.md
 instructions/DOCUMENTATION-STRUCTURE.md
+agents/coupon.agent.md
+instructions/vault-secrets-access.instructions.md

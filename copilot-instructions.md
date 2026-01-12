@@ -27,6 +27,40 @@ version: "2.0"
 ✅ Sem documentação, sem changelogs  
 ✅ Máximo 1 nível de subagente
 
+### 4. CREDENCIAIS: SEMPRE DO VAULT
+✅ NUNCA hardcode senhas em código  
+✅ SEMPRE recuperar do Vault (`secret/shared/database`, `secret/shared/cache`)  
+✅ Usar função helper para acessar Vault  
+✅ Limpar variáveis sensíveis após uso  
+⚠️ Ver `/home/admin/.github/instructions/vault-secrets-access.instructions.md` para exemplos
+
+### 5. NUNCA FALLBACK SYNC QUANDO ASYNC ESTÁ DISPONÍVEL
+❌ **PROIBIDO** criar fallback síncrono para operações assíncronas  
+❌ **PROIBIDO** manter `try/except ImportError` com imports locais  
+❌ **PROIBIDO** backward compatibility com versões antigas de APIs  
+✅ **OBRIGATÓRIO** sempre usar async quando disponível (ex: UrlShortenerService)  
+✅ **OBRIGATÓRIO** passar `db` e `redis_client` como dependências  
+✅ **OBRIGATÓRIO** converter callers para `async`/`await`  
+
+**Exemplo (ERRADO - não fazer)**:
+```python
+# ❌ NUNCA fazer isso
+try:
+    from app.utils.old_sync import SyncHelper
+    result = SyncHelper().do_something()
+except ImportError:
+    result = fallback_sync_impl()
+```
+
+**Exemplo (CORRETO)**:
+```python
+# ✅ ASSIM SIM
+from app.services.async_service import AsyncService
+async def process():
+    service = AsyncService(db, redis)
+    result = await service.do_something()
+```
+
 ---
 
 ## 📋 Quando Criar Arquivos
