@@ -192,12 +192,12 @@ Memory agent returns:
 
 ## Integration with Other Agents
 
-- **@product**: Provides new requirements and plans
-- **@engineering**: Implements features and updates
-- **@quality**: Documents test findings
-- **@ops**: Documents deployment procedures
-- **@security**: Logs security findings
-- **@analyst**: Investigates and documents incidents
+- **@planner-architect**: Provides new requirements and plans
+- **@backend-implementer**: Implements backend features and updates
+- **@frontend-implementer**: Implements frontend features and updates
+- **@code-reviewer**: Documents test findings and security reviews
+- **@infra-implementer**: Documents deployment procedures
+- **@explorer**: Investigates and documents incidents
 
 ---
 
