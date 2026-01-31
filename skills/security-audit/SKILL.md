@@ -1,122 +1,107 @@
 ---
 name: security-audit
-description: Audit code for security vulnerabilities using OWASP Top 10, STRIDE threat modeling, and secure coding practices. Identifies SQL injection, XSS, CSRF, auth issues, and secrets exposure. Returns prioritized findings with remediation.
+description: "Security audit and vulnerability detection - OWASP Top 10, input validation, injection attacks"
 ---
 
 # Security Audit Skill
 
-## When to Use
+## OWASP Top 10 Checks
 
-Use this skill when:
-- Reviewing code for security vulnerabilities
-- Auditing authentication/authorization logic
-- Checking for secrets exposure in code
-- Validating input sanitization
-- Reviewing API security (rate limiting, CORS)
-- Assessing database query safety
-- Evaluating encryption and hashing
-
-## OWASP Top 10 Checklist
-
-### A01: Broken Access Control
-```
-✅ Checks:
-- [ ] Role-based access control (RBAC) implemented
-- [ ] JWT validation on all protected endpoints
-- [ ] Authorization checks in service layer
-- [ ] No direct object references exposed
-- [ ] Admin functions protected
-```
-
-### A02: Cryptographic Failures
-```
-✅ Checks:
-- [ ] Passwords hashed with bcrypt/argon2
-- [ ] Secrets in environment variables (not code)
-- [ ] HTTPS enforced
-- [ ] Sensitive data encrypted at rest
-- [ ] No hardcoded API keys
-```
-
-### A03: Injection
-```
-✅ Checks:
-- [ ] Parameterized SQL queries (SQLAlchemy ORM)
-- [ ] Input validation with Pydantic
-- [ ] No string concatenation in queries
-- [ ] Command injection prevented
-- [ ] XSS sanitization on output
-```
-
-### A04: Insecure Design
-```
-✅ Checks:
-- [ ] Rate limiting implemented
-- [ ] CORS properly configured
-- [ ] Error messages don't leak info
-- [ ] Defense in depth applied
-- [ ] Fail-secure defaults
-```
-
-### A07: Authentication Failures
-```
-✅ Checks:
-- [ ] Strong password policy
-- [ ] Account lockout after failures
-- [ ] Session timeout configured
-- [ ] MFA available
-- [ ] Secure password reset flow
-```
-
-## STRIDE Threat Model
-
-```
-S - Spoofing: Can attacker impersonate user?
-T - Tampering: Can attacker modify data?
-R - Repudiation: Can actions be traced?
-I - Information Disclosure: Can data leak?
-D - Denial of Service: Can system be crashed?
-E - Elevation of Privilege: Can attacker gain admin?
-```
-
-## Output Format
-
-```markdown
-## Security Audit Report
-
-### Severity Summary
-- 🔴 Critical: X findings
-- 🟠 High: X findings
-- 🟡 Medium: X findings
-- 🟢 Low: X findings
-
-### Findings
-
-#### [SEV-001] SQL Injection in user_service.py:45
-- **Severity**: Critical
-- **OWASP**: A03 Injection
-- **Location**: `backend/services/user_service.py:45-50`
-- **Issue**: String concatenation in SQL query
-- **Remediation**: Use parameterized query
-- **Code Fix**:
+### 1. Broken Access Control
 ```python
-# Before (vulnerable)
-query = f"SELECT * FROM users WHERE id = {user_id}"
+# ❌ WRONG: No authorization check
+@router.delete("/users/{user_id}")
+async def delete_user(user_id: int):
+    await db.delete(User, user_id)
 
-# After (secure)
-query = select(User).where(User.id == user_id)
+# ✅ RIGHT: Check permissions
+@router.delete("/users/{user_id}")
+async def delete_user(user_id: int, current_user: User):
+    if user_id != current_user.id and current_user.role != "admin":
+        raise HTTPException(403, "Not authorized")
+    await db.delete(User, user_id)
 ```
 
-### Recommendations
-1. [Priority 1 fix]
-2. [Priority 2 fix]
+### 2. Cryptographic Failures
+```python
+# ❌ WRONG: Store plain password
+user.password = password
+
+# ✅ RIGHT: Hash password
+user.password = hashlib.sha256(password.encode()).hexdigest()
+# Better: use bcrypt/argon2
+from passlib.context import CryptContext
+pwd_context = CryptContext(schemes=["bcrypt"])
+user.password = pwd_context.hash(password)
 ```
 
-## Example Usage
+### 3. Injection Attacks
+```python
+# ❌ WRONG: SQL injection
+query = f"SELECT * FROM users WHERE email = '{email}'"
 
+# ✅ RIGHT: Parameterized queries
+query = select(User).where(User.email == email)
 ```
-@security Audit the authentication module for vulnerabilities
-@security Check for secrets exposure in the codebase
-@security Review API endpoints for injection risks
-@security Validate CORS configuration
+
+### 4. Insecure Design
+- Input validation on ALL endpoints
+- Rate limiting on sensitive operations
+- CSRF tokens for state changes
+- CORS properly configured
+
+### 5. Security Misconfiguration
+```python
+# ❌ WRONG: Debug in production
+app = FastAPI(debug=True)
+
+# ✅ RIGHT: Debug only in dev
+app = FastAPI(debug=os.getenv("ENVIRONMENT") == "development")
 ```
+
+### 6. Vulnerable & Outdated Components
+- Pin dependencies versions
+- Regular security updates
+- Audit packages: `pip audit`
+- Use dependabot/renovate
+
+### 7. Authentication Failures
+```python
+# ✅ Best Practice: JWT with expiration
+token = jwt.encode(
+    {
+        "sub": user.id,
+        "exp": datetime.utcnow() + timedelta(hours=24)
+    },
+    SECRET_KEY,
+    algorithm="HS256"
+)
+```
+
+### 8. Software & Data Integrity Failures
+- Verify package signatures
+- Use HTTPS only
+- Sign API responses (when needed)
+
+### 9. Logging & Monitoring Failures
+```python
+# ✅ Log security events
+logger.warning(f"Failed login attempt for {email}")
+logger.error(f"SQL error encountered: {error_code}")
+# BUT: Never log passwords, tokens, PII!
+```
+
+### 10. Server-Side Request Forgery (SSRF)
+- Validate URLs before fetching
+- Whitelist allowed domains
+- Disabled redirects to internal IPs
+
+## Checklist
+- [ ] All inputs validated
+- [ ] Passwords hashed (bcrypt/argon2)
+- [ ] No hardcoded secrets
+- [ ] CORS configured properly
+- [ ] Rate limiting active
+- [ ] Errors don't leak info
+- [ ] HTTPS only
+- [ ] Security headers set
