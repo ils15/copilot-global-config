@@ -2,24 +2,24 @@
 
 ## 🏛️ Agent Architecture
 
-Arquitetura baseada em **padrão Conductor-Delegate** com 9 deidades mitológicas:
+Architecture based on **Conductor-Delegate pattern** with 9 mythological deities:
 - 1 Orchestrator (Zeus) + 8 Specialized Subagents
 
 ### Orchestrator Tier
 
-#### ⚡ **Zeus** (.github/agents/zeus.agent.md)
+#### ⚡ **Zeus** (agents/zeus.agent.md)
 Central coordinator delegating work to specialized subagents.
 
 **When to use:** Complex feature implementation, multi-layer coordination, cross-functional tasks  
 **Role:** Feature orchestration, phase transition, context management  
-**Delegates to:** metis → apollo → {hermes, athena, tethys} → hephaestus → tyr → mnemosyne
+**Delegates to:** athena → apollo → {hermes, aphrodite, maat} → ra → temis → mnemosyne
 
 **Example:**
 ```
 /implement-feature Add JWT authentication to API
 
 Zeus orchestrates:
-1. Metis plans architecture
+1. Athena plans architecture
 2. Apollo explores codebase
 3. Hermes implements backend
 4. Athena implements frontend
@@ -33,21 +33,21 @@ Zeus orchestrates:
 
 ### Planning Tier
 
-#### 🧠 **Metis** (.github/agents/aphrodite-subagent.agent.md)
+#### 🧠 **Athena** (agents/athena.agent.md)
 Strategic planner with research capability. Generates detailed TDD-driven implementation roadmaps.
 
 **When to use:** Architecture decisions, technology research, detailed planning before implementation  
 **Tools:** search, usages, fetch_webpage (for external research)  
-**Calls:** apollo (for parallel discovery)  
+**Calls:** apollo (for codebase discovery), hermes (for implementation)  
 **Skills:** plan-architecture.prompt  
 
 **Example:**
 ```
 /plan-architecture Implement caching layer (L1 local + L2 Redis)
 
-Metis:
+Athena:
 1. Researches caching patterns
-2. Calls Apollo for existing cache references
+2. Calls Hermes for backend implementation
 3. Creates detailed TDD plan
 4. Proposes implementation phases
 5. Hands off to Zeus for execution
@@ -57,12 +57,14 @@ Metis:
 
 ### Discovery Tier
 
-#### 🔍 **Apollo** (.github/agents/apollo-subagent.agent.md)
-Parallel file discovery and intelligence gathering. Can run 3-10 simultaneous searches.
+#### 🔍 **Apollo** (agents/apollo.agent.md)
+Basic code search and discovery agent. Supports planner, debugger, and other agents with rapid file location and pattern finding.
 
-**When to use:** Rapid codebase exploration, bug root cause discovery, cross-file pattern analysis  
+**When to use:** Rapid codebase exploration, bug root cause discovery, finding files before implementation, helping any agent locate code  
+**Called by:** Athena (planning), Zeus (debugging), Hermes/Aphrodite/Maat (locating existing patterns)  
 **Tools:** search, usages (read-only parallel searches)  
 **Parallelism:** Up to 10 simultaneous search queries  
+**Web Research:** Suggests official docs, RFCs, and best practices for Athena to fetch  
 **Skills:** debug-issue.prompt  
 
 **Example:**
@@ -78,18 +80,20 @@ Apollo searches (parallel):
 6. Mock data in tests
 
 → Synthesizes findings into root cause
+→ Recommends Athena fetch: SQLAlchemy async patterns, FastAPI error handling best practices
 ```
 
 ---
 
 ### Implementation Tier (Parallel Executors)
 
-#### 🔥 **Hermes** (.github/agents/hermes-subagent.agent.md)
+#### 🔥 **Hermes** (agents/hermes.agent.md)
 Backend APIs, FastAPI services, async business logic.
 
 **When to use:** API endpoint implementation, service layer creation, async I/O handling  
 **Specialization:** FastAPI, Python, async/await, TDD backend  
-**Depends on:** tethys (database), hephaestus (deployment)  
+**Depends on:** maat (database), ra (deployment)  
+**Can call:** apollo (for codebase discovery)  
 **Skills:** backend-standards.instructions, tdd-testing, api-design, security-audit  
 **Tools:** search, usages, read-file, edit, runCommands  
 
@@ -103,12 +107,13 @@ Backend APIs, FastAPI services, async business logic.
 
 ---
 
-#### 💎 **Athena** (.github/agents/aphrodite-subagent.agent.md)
+#### 💎 **Aphrodite** (agents/aphrodite.agent.md)
 Frontend UI/UX, React components, responsive design.
 
 **When to use:** Component creation, UI improvements, accessibility fixes, state management  
 **Specialization:** React, TypeScript, responsive design, WCAG accessibility  
 **Depends on:** hermes (API endpoints)  
+**Can call:** apollo (for component discovery)  
 **Skills:** frontend-standards.instructions, tdd-testing, api-design  
 **Tools:** search, usages, read-file, edit, runCommands  
 
@@ -122,12 +127,12 @@ Frontend UI/UX, React components, responsive design.
 
 ---
 
-#### 🌊 **Maat** (.github/agents/tethys-subagent.agent.md)
+#### 🌊 **Maat** (agents/maat.agent.md)
 Database design, SQL optimization, migration management.
 
 **When to use:** Schema design, query optimization, N+1 prevention, migration strategy  
 **Specialization:** SQLAlchemy ORM, Alembic migrations, query analysis  
-**Dependencies:** metis (planning), hermes (schema needs)  
+**Dependencies:** athena (planning), hermes (schema needs)  
 **Skills:** database-standards.instructions, database-migration, performance-optimization, security-audit  
 **Tools:** search, usages, read-file, edit, runCommands  
 
@@ -141,7 +146,7 @@ Database design, SQL optimization, migration management.
 
 ---
 
-#### ⚙️ **Ra** (.github/agents/hephaestus-subagent.agent.md)
+#### ⚙️ **Ra** (agents/ra.agent.md)
 Infrastructure, Docker containerization, deployment orchestration.
 
 **When to use:** Container optimization, deployment strategy, infrastructure as code, CI/CD  
@@ -162,12 +167,12 @@ Infrastructure, Docker containerization, deployment orchestration.
 
 ### Quality Assurance Tier
 
-#### ⚖️ **Temis** (.github/agents/tyr-subagent.agent.md)
+#### ⚖️ **Temis** (agents/temis.agent.md)
 Code review, security audit, quality gates.
 
 **When to use:** Code review before merge, security scan, test coverage validation, architecture review  
 **Specialization:** Code review checklist, OWASP security audit, >80% coverage validation  
-**Reviews:** All outputs from hermes, athena, tethys  
+**Reviews:** All outputs from hermes, aphrodite, maat  
 **Skills:** code-review-standards.instructions, security-audit, tdd-testing  
 **Tools:** search, usages, read-file, edit, runTasks  
 
@@ -185,7 +190,7 @@ Code review, security audit, quality gates.
 
 ### Memory Tier
 
-#### 📚 **Mnemosyne** (.github/agents/mnemosyne-subagent.agent.md)
+#### 📚 **Mnemosyne** (agents/mnemosyne.agent.md)
 Memory bank management, decision documentation, progress tracking.
 
 **When to use:** End of sprint/feature, decision documentation, retrospectives, memory updates  
@@ -207,38 +212,38 @@ Memory bank management, decision documentation, progress tracking.
 
 ## ✋ MANDATORY PAUSE POINTS
 
-O sistema Zeus é controlado pelo usuário através de **PAUSE POINTS OBRIGATÓRIOS** em cada fase:
+The Zeus system is controlled by the user through **MANDATORY PAUSE POINTS** at each phase:
 
 ### Pause Point 1: Planning Approval
 ```
-Metis cria plano detalhado
+Athena creates detailed plan
      ↓
-⏸️  STOP: Usuário revisa e aprova plano
+⏸️  STOP: User reviews and approves plan
      ↓
-Plano salvo em: plans/<feature-name>/plan.md
+Plan saved in: plans/<feature-name>/plan.md
 ```
 
 ### Pause Point 2: Phase Implementation Review
 ```
-Hermes/Athena/Maat implementa fase
+Hermes/Aphrodite/Maat implements phase
      ↓
-Temis revisa código
+Temis reviews code
      ↓
-⏸️  STOP: Mostrar resultado e pedir confirmação
+⏸️  STOP: Show result and ask for confirmation
      ↓
-Resultado salvo em: plans/<feature-name>/phase-N-complete.md
+Result saved in: plans/<feature-name>/phase-N-complete.md
 ```
 
 ### Pause Point 3: Git Commit
 ```
-Zeus gera commit message
+Zeus generates commit message
      ↓
-⏸️  STOP: Usuário executa "git commit" manualmente
+⏸️  STOP: User executes "git commit" manually
      ↓
-Proxima fase inicia
+Next phase starts
 ```
 
-**Benefício:** Você mantém controle e pode interromper em qualquer momento.
+**Benefit:** You maintain control and can interrupt at any time.
 
 ---
 
@@ -267,11 +272,11 @@ User: /debug-issue API returns 500 on POST /users
 ⏸️  MANDATORY STOP: User commits to git
 ```
 
-### Pattern 2: Feature Implementation (Metis → Hermes/Athena/Maat → Temis → Ra)
+### Pattern 2: Feature Implementation (Athena → Hermes/Aphrodite/Maat → Temis → Ra)
 ```
 User: /implement-feature Add email verification flow
 
-1. Metis plans (triggers via /plan-architecture if needed)
+1. Athena plans (triggers via /plan-architecture if needed)
    ├─ Design database schema
    ├─ Design API endpoints
    ├─ Design frontend components
@@ -284,7 +289,7 @@ User: /implement-feature Add email verification flow
    
    Phase N Implementation:
    ├─ Hermes: Write FAILING tests → minimal code → PASSING tests
-   ├─ Athena: Write FAILING tests → minimal code → PASSING tests  
+   ├─ Aphrodite: Write FAILING tests → minimal code → PASSING tests  
    └─ Maat: Write migration tests → minimal schema → passing tests
    
    Phase N Review:
@@ -332,35 +337,35 @@ User: /optimize-database GET /products endpoint slow
 
 ## 🧠 CONTEXT WINDOW MANAGEMENT
 
-Cada agente especializado **conserva tokens** através de estratégias:
+Each specialized agent **conserves tokens** through strategies:
 
 ### Apollo (Discovery)
-- **Input:** Descrição do problema
-- **Output:** SUMÁRIO estruturado, NÃO código raw
-- **Estratégia:** Busca paralela (3-10 simultâneas) retorna apenas high-signal findings
-- **Economia:** 60-70% menos tokens que raw code dump
+- **Input:** Problem description
+- **Output:** Structured SUMMARY, NOT raw code
+- **Strategy:** Parallel search (3-10 simultaneous) returns only high-signal findings
+- **Savings:** 60-70% fewer tokens than raw code dump
 
-### Hermes/Athena/Maat (Implementation)
-- **Input:** Escopo de fase específica + tests a passar
-- **Output:** APENAS arquivos que modifica nesta fase
-- **Estratégia:** Não relê arquitetura completa, só seus arquivos
-- **Economia:** 50% menos tokens vs monolithic agent
+### Hermes/Aphrodite/Maat (Implementation)
+- **Input:** Specific phase scope + tests to pass
+- **Output:** ONLY files it modifies in this phase
+- **Strategy:** Doesn't re-read complete architecture, only its files
+- **Savings:** 50% fewer tokens vs monolithic agent
 
 ### Temis (Review)
 - **Input:** Git diff (changed files only)
-- **Output:** Comments estruturados com status (APPROVED/NEEDS_REVISION/FAILED)
-- **Estratégia:** Revê apenas changed lines, não repositório inteiro
-- **Economia:** 60% menos tokens que full codebase review
+- **Output:** Structured comments with status (APPROVED/NEEDS_REVISION/FAILED)
+- **Strategy:** Reviews only changed lines, not entire repository
+- **Savings:** 60% fewer tokens than full codebase review
 
-### Resultado
-- **Traditional:** Single agent usa 80-90% context apenas em pesquisa/análise
-- **Zeus system:** 10-15% context para análise, **70-80% livre** para reasoning profundo
+### Result
+- **Traditional:** Single agent uses 80-90% context only on research/analysis
+- **Zeus system:** 10-15% context for analysis, **70-80% free** for deep reasoning
 
 ---
 
 ## 🎯 TDD ENFORCEMENT WORKFLOW
 
-Todos os agentes de implementação (Hermes, Athena, Maat) seguem **RIGOROSAMENTE**:
+All implementation agents (Hermes, Aphrodite, Maat) follow **RIGOROUSLY**:
 
 ### Phase 1: RED (Test Fails)
 ```python
@@ -427,22 +432,22 @@ class User:
 
 ## 📁 PLAN DIRECTORY STRUCTURE
 
-Cada feature cria um diretório documentado:
+Each feature creates a documented directory:
 
 ```
 plans/
-├── .gitignore          # Ignore plans por default
-├── README.md          # Como usar plan directory
+├── .gitignore          # Ignore plans by default
+├── README.md          # How to use plan directory
 │
 └── <feature-name>/
-    ├── plan.md        # Plano aprovado pelo usuário
+    ├── plan.md        # Plan approved by user
     ├── phase-1-complete.md
     ├── phase-2-complete.md
     ├── phase-3-complete.md
-    └── complete.md    # Summary final
+    └── complete.md    # Final summary
 ```
 
-### plan.md (Criado por Metis, Aprovado por Usuário)
+### plan.md (Created by Athena, Approved by User)
 ```markdown
 # Feature: Email Verification Flow
 
@@ -473,7 +478,7 @@ Add email verification to new user registrations.
 - Frontend: components/VerificationForm.tsx, hooks/useVerification.ts
 ```
 
-### phase-N-complete.md (Criado após cada fase passar Temis review)
+### phase-N-complete.md (Created after each phase passes Temis review)
 ```markdown
 # Phase 1 Complete: Database Schema
 
@@ -504,7 +509,7 @@ feat: Add email verification database schema
 - TTL enforced by trigger, not application logic
 ```
 
-### complete.md (Summary final após todas as fases)
+### complete.md (Final summary after all phases)
 ```markdown
 # Feature Complete: Email Verification Flow
 
@@ -541,19 +546,19 @@ Each agent can be invoked directly for bypass orchestration:
 
 ```bash
 # Invoke specific agent
-@hermes: Create POST /products endpoint with TDD
+@apollo: Find all authentication-related files
 
-@tethys: Optimize users table queries
+@athena: Plan email verification feature
+
+@hermes: Create POST /products endpoint with TDD
 
 @aphrodite: Build ProductCard component with Storybook
 
-@apollo: Find all uses of deprecated api.getUsers() method
+@maat: Optimize users table queries
 
-@aphrodite: Plan migration from REST to GraphQL
+@ra: Create multi-stage Docker build for new service
 
-@tyr: Review this PR for security issues
-
-@hephaestus: Create multi-stage Docker build for new service
+@temis: Review this PR for security issues
 
 @mnemosyne: Update memory bank with completed features
 
@@ -566,64 +571,61 @@ Each agent can be invoked directly for bypass orchestration:
 
 | Need | Agent | Trigger |
 |------|-------|---------|
-| Plan architecture | metis | `/plan-architecture` |
+| Plan architecture | athena | `/plan-architecture` |
 | Debug issue | apollo | `/debug-issue` |
+| Find files/code | apollo | Direct: @apollo |
 | New API endpoint | hermes | Direct: @hermes |
-| New component | athena | Direct: @aphrodite |
-| Database optimization | tethys | `/optimize-database` |
-| Deploy changes | hephaestus | Direct: @hephaestus |
-| Code review | tyr | `/review-code` |
+| New component | aphrodite | Direct: @aphrodite |
+| Database optimization | maat | `/optimize-database` |
+| Deploy changes | ra | Direct: @ra |
+| Code review | temis | `/review-code` |
 | Document decisions | mnemosyne | Direct: @mnemosyne |
 | Coordinate feature | zeus | `/implement-feature` |
-| Start fresh planning | metis | `/plan-architecture` |
-| Quick code search | apollo | `/debug-issue` |
-| Optimize database | tethys | Direct: @tethys with EXPLAIN ANALYZE |
-| Deploy to prod | hephaestus | Direct: @hephaestus with dockerfile |
 
 ---
 
 ## 🎯 MODEL FALLBACK STRATEGY
 
-Cada agente suporta múltiplos modelos com fallback automático:
+Each agent supports multiple models with automatic fallback:
 
 ```yaml
 # Zeus (Orchestrator)
 model: ['Claude Sonnet 4.5 (copilot)', 'GPT-5 (copilot)']
-# Prioriza a mais capaz, fallback se unavailable
+# Prioritizes the most capable, fallback if unavailable
 
-# Metis (Planning)
+# Athena (Planning)
 model: ['GPT-5 (copilot)', 'Claude Sonnet 4.5 (copilot)']
-# GPT-5 melhor para reasoning em planning
+# GPT-5 better for reasoning in planning
 
 # Apollo (Discovery)
 model: ['Gemini 3 Flash (copilot)', 'Claude Haiku 4.5 (copilot)']
-# Flash é rápido para buscas paralelas
+# Flash is fast for parallel searches
 
-# Hermes/Athena/Maat (Implementation)
+# Hermes/Aphrodite/Maat (Implementation)
 model: ['Claude Sonnet 4.5 (copilot)', 'Claude Haiku 4.5 (copilot)']
-# Sonnet para complexidade, fallback para Haiku (economico)
+# Sonnet for complexity, fallback to Haiku (economical)
 
 # Temis (Review)
 model: ['Claude Sonnet 4.5 (copilot)', 'GPT-5 (copilot)']
-# Requer reasoning profundo para code review
+# Requires deep reasoning for code review
 
 # Mnemosyne (Memory)
 model: ['Claude Haiku 4.5 (copilot)']  
-# Haiku é suficiente para documentação
+# Haiku is sufficient for documentation
 ```
 
-**Benefício:** Se modelo principal estiver unavailable, sistema usa fallback automaticamente.
+**Benefit:** If main model is unavailable, system uses fallback automatically.
 
 ---
 
 ## 🔧 CUSTOM AGENT EXTENSION
 
-Para criar um novo agente especializado (exemplo: Database-Expert):
+To create a new specialized agent (example: Database-Expert):
 
 ### Step 1: Create Agent File
 ```bash
 mkdir -p .github/agents
-cat > .github/agents/database-expert-subagent.agent.md << 'EOF'
+cat > agents/database-expert-subagent.agent.md << 'EOF'
 ---
 name: database-expert
 user-invokable: false  # Only for internal delegation
@@ -651,16 +653,16 @@ EOF
 ```
 
 ### Step 2: Register with Zeus
-Edit `.github/agents/zeus.agent.md` and add:
+Edit `agents/zeus.agent.md` and add:
 ```markdown
-**10. DatabaseExpert-subagent**: Especialista em SQL e schema design
-- Use para análises de query performance
-- Invoque para designs de schema complexos
-- Sempre retorna structured findings, nunca raw SQL dumps
+**10. DatabaseExpert-subagent**: SQL and schema design specialist
+- Use for query performance analysis
+- Invoke for complex schema designs
+- Always returns structured findings, never raw SQL dumps
 ```
 
-### Step 3: Register with Metis (for planning phase)
-Edit `.github/agents/aphrodite-subagent.agent.md` and add:
+### Step 3: Register with Athena (for planning phase)
+Edit `agents/athena.agent.md` and add:
 ```markdown
 **When researching database architecture, delegate to DatabaseExpert-subagent:**
 - Goal: Analyze current schema and identify optimization opportunities
@@ -691,27 +693,27 @@ Edit `.github/agents/aphrodite-subagent.agent.md` and add:
 
 ## � ARTIFACTS GENERATED BY WORKFLOW
 
-Cada execução do Zeus cria artifacts documentados:
+Each Zeus execution creates documented artifacts:
 
-### Durante Planning Phase
+### During Planning Phase
 ```
 plans/<feature-name>/
-└── plan.md              (Estrutura completa, 3-10 fases, TDD roadmap)
+└── plan.md              (Complete structure, 3-10 phases, TDD roadmap)
 ```
-**Contém:**
+**Contains:**
 - Feature overview and objectives
-- Fase-by-fase breakdown com test requirements
+- Phase-by-phase breakdown with test requirements
 - Listed files to create/modify
 - Open questions for user
 - Risk assessment
 
-### Durante Implementation Phase (por phase)
+### During Implementation Phase (per phase)
 ```
 plans/<feature-name>/
-└── phase-N-complete.md  (Resultado de CADA fase após Temis approval)
+└── phase-N-complete.md  (Result of EACH phase after Temis approval)
 ```
-**Contém:**
-- Phase objective e summary
+**Contains:**
+- Phase objective and summary
 - Files created/modified
 - Tests created/passed
 - Coverage percentage
@@ -719,12 +721,12 @@ plans/<feature-name>/
 - Git commit message
 - Decisions made in this phase
 
-### Após Completion
+### After Completion
 ```
 plans/<feature-name>/
-└── complete.md          (Summary final de todo projeto)
+└── complete.md          (Final summary of entire project)
 ```
-**Contém:**
+**Contains:**
 - Total phases completed checklist
 - Total coverage percentage
 - Complete file impact list
@@ -732,12 +734,12 @@ plans/<feature-name>/
 - Test coverage summary
 - Recommendations for next steps
 
-### Benefits da Artifact Trail
-- ✅ **Audit Trail**: Review exato do que foi feito
-- ✅ **Knowledge Transfer**: Novos team members entendem decisões
-- ✅ **Project Documentation**: Natural documentation do feature dev
-- ✅ **PR Descriptions**: Copie plan.md para seu PR
-- ✅ **Resumable Work**: Se interrompido, continue de qualquer phase
+### Benefits of the Artifact Trail
+- ✅ **Audit Trail**: Exact review of what was done
+- ✅ **Knowledge Transfer**: New team members understand decisions
+- ✅ **Project Documentation**: Natural documentation of feature dev
+- ✅ **PR Descriptions**: Copy plan.md to your PR
+- ✅ **Resumable Work**: If interrupted, continue from any phase
 
 ---
 
@@ -746,16 +748,16 @@ plans/<feature-name>/
 - **Agent Skills:** `.github/skills/*/SKILL.md`
 - **Custom Instructions:** `.github/instructions/*-standards.instructions.md`
 - **Prompt Files:** `.github/prompts/*.prompt.md`
-- **Agent Definitions:** `.github/agents/*.agent.md`
+- **Agent Definitions:** `agents/*.agent.md`
 - **Memory Bank:** `/docs/memory-bank/`
 - **VSCode Settings:** `.vscode/settings.json`
 
 ---
 
-**Last Updated:** [AUTO-UPDATED on agent creation]  
+**Last Updated:** February 5, 2026  
 **Total Agents:** 9 (1 orchestrator + 8 specialized)  
 **Total Skills:** 6  
 **Total Custom Instructions:** 5  
-**Total Prompt Files:** 5  
+**Total Prompt Files:** 6  
 **Architecture Pattern:** Conductor-Delegate  
-**Mythology Reference:** Greek, Norse, Egyptian Deities
+**Mythology Reference:** Greek (Zeus, Athena, Apollo, Hermes, Aphrodite), Egyptian (Ra, Maat, Temis), Greek memory (Mnemosyne)

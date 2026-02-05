@@ -2,7 +2,7 @@
 name: aphrodite
 description: React 19 + TypeScript UI/UX specialist - components, hooks, styling, responsive design
 argument-hint: "What frontend implementation task to perform (component, page, hook, styling)"
-model: Claude Sonnet 4.5 (copilot)
+model: [Claude Sonnet 4.5 (copilot), Gemini 3 Pro (Preview) (copilot)]
 tools: ['search/codebase', 'search/usages', 'edit/editFiles', 'execute/runInTerminal', 'execute/runTask']
 agents: []
 ---

@@ -8,10 +8,10 @@
 
 This is a **conductor system for 9 specialized AI agents** that work together to implement features in your codebase. Each agent is an expert at one thing:
 
-- 🧠 **Metis** - Plans the architecture
+- 🧠 **Athena** - Plans the architecture
 - ⚡ **Zeus** - Orchestrates all agents  
 - 🔥 **Hermes** - Writes backend code
-- 💎 **Athena** - Builds frontend components
+- 💎 **Aphrodite** - Builds frontend components
 - 🌊 **Maat** - Designs database schema
 - ⚖️ **Temis** - Reviews code & enforces quality
 - ⚙️ **Ra** - Handles infrastructure
@@ -56,7 +56,7 @@ This system:
 Instead of one agent doing everything, you have experts:
 
 - 🔥 **Hermes** knows FastAPI async patterns, SQL optimization—not React
-- 💎 **Athena** knows React hooks, animations, accessibility—not database queries
+- 💎 **Aphrodite** knows React hooks, animations, accessibility—not database queries
 - 🌊 **Maat** knows query plans, indexes, migrations—not component design
 
 Each agent is **world-class at ONE thing**, not okay at everything.
@@ -83,7 +83,7 @@ No human forgets to test. The system REQUIRES it with RED→GREEN→REFACTOR:
 The system has **3 mandatory pause points** where YOU make decisions:
 
 ```
-⏸️ PAUSE 1: "Does this plan make sense?" (after Metis plans)
+⏸️ PAUSE 1: "Does this plan make sense?" (after Aphrodite plans)
 ⏸️ PAUSE 2: "Is this what you wanted?" (after each implementation phase)
 ⏸️ PAUSE 3: "Ready to commit?" (before git merge)
 ```
@@ -112,7 +112,7 @@ AI does the work. You keep control. You maintain git history. You approve change
 ### Your First Feature (3 Steps)
 
 ```bash
-# Step 1: Ask Metis to plan
+# Step 1: Ask Aphrodite to plan
 @aphrodite: Plan JWT authentication with refresh tokens
 
 # Step 2: Review the plan in plans/jwt-auth/plan.md
@@ -148,9 +148,9 @@ git commit -m "feat: Add JWT authentication"
     ↓ PHASE 1:        PHASE 2-N:           PHASE N+1:
   Planning            Implementation       Deployment
     ↓                    ↓                    ↓
-  Metis              Parallel Agents      Ra
+  Aphrodite              Parallel Agents      Ra
   Apollo (find)     ├─ Hermes (backend)   (Docker/Deploy)
-  ↓                 ├─ Athena (frontend)
+  ↓                 ├─ Aphrodite (frontend)
   plan.md           └─ Maat (database)
   ↓                    ↓
   ⏸️ PAUSE 1        Temis (reviews)
@@ -167,10 +167,10 @@ git commit -m "feat: Add JWT authentication"
 
 | Agent | Role | When You Use It | Key Strength |
 |-------|------|-----------------|--------------|
-| 🧠 **Metis** | Strategic planner | Complex new features | Creates detailed 3-10 phase plans with test requirements |
+| 🧠 **Athena** | Strategic planner | Complex new features | Creates detailed 3-10 phase plans with test requirements |
 | ⚡ **Zeus** | Orchestrator | Features spanning multiple layers | Coordinates all agents, manages pause points |
 | 🔥 **Hermes** | Backend specialist | APIs, services, business logic | FastAPI expert, async/await patterns, TDD |
-| 💎 **Athena** | Frontend specialist | UI components, React code | React expert, WCAG accessibility, responsive design |
+| 💎 **Aphrodite** | Frontend specialist | UI components, React code | React expert, WCAG accessibility, responsive design |
 | 🌊 **Maat** | Database specialist | Schema, query optimization | N+1 prevention, zero-downtime migrations, indexes |
 | ⚖️ **Temis** | Code reviewer | Auto-invoked after each phase | Enforces >80% coverage, OWASP security, performance |
 | ⚙️ **Ra** | Infrastructure | Docker, deployment, CI/CD | Multi-stage builds, zero-downtime deploys |
@@ -225,9 +225,9 @@ Hermes implements (in parallel while you review Phase 1):
 
 ### Phase 3: Frontend Form
 
-**Time:** 2-3 hours | **Owner:** Athena
+**Time:** 2-3 hours | **Owner:** Aphrodite
 
-Athena implements (in parallel):
+Aphrodite implements (in parallel):
 - `VerificationForm` React component
 - `useVerification` hook for state
 - Email input + verification code input
@@ -335,7 +335,7 @@ Each agent gets:
 ### Direct Agent Invocation (Skip Orchestration)
 
 ```bash
-# Just need backend? Skip Metis, go directly to Hermes
+# Just need backend? Skip Aphrodite, go directly to Hermes
 @hermes: Create POST /products endpoint with pagination
 
 # Just need frontend optimization?

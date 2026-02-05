@@ -2,9 +2,9 @@
 name: zeus
 description: Main conductor orchestrating the full development lifecycle - delegating to specialized agents
 argument-hint: "What development phase to orchestrate (planning, implementation, review, deployment)"
-model: Claude Sonnet 4.5 (copilot)
+model: Claude Opus 4.6 (copilot)
 tools: ['agent', 'vscode/runCommand', 'vscode/switchAgent', 'execute/runInTerminal', 'execute/runTask', 'read/readFile', 'search/codebase', 'search/usages', 'edit/createFile', 'edit/editFiles', 'web/fetch']
-agents: ['athena', 'hermes', 'aphrodite', 'maat', 'ra', 'temis', 'mnemosyne']
+agents: ['athena', 'apollo', 'hermes', 'aphrodite', 'maat', 'ra', 'temis', 'mnemosyne']
 ---
 
 # Zeus - Main Conductor
