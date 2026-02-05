@@ -83,7 +83,7 @@ No human forgets to test. The system REQUIRES it with RED→GREEN→REFACTOR:
 The system has **3 mandatory pause points** where YOU make decisions:
 
 ```
-⏸️ PAUSE 1: "Does this plan make sense?" (after Aphrodite plans)
+⏸️ PAUSE 1: "Does this plan make sense?" (after Athena plans)
 ⏸️ PAUSE 2: "Is this what you wanted?" (after each implementation phase)
 ⏸️ PAUSE 3: "Ready to commit?" (before git merge)
 ```
@@ -112,8 +112,8 @@ AI does the work. You keep control. You maintain git history. You approve change
 ### Your First Feature (3 Steps)
 
 ```bash
-# Step 1: Ask Aphrodite to plan
-@aphrodite: Plan JWT authentication with refresh tokens
+# Step 1: Ask Athena to plan
+@athena: Plan JWT authentication with refresh tokens
 
 # Step 2: Review the plan in plans/jwt-auth/plan.md
 # Then approve: "Plan looks good!"
@@ -148,7 +148,7 @@ git commit -m "feat: Add JWT authentication"
     ↓ PHASE 1:        PHASE 2-N:           PHASE N+1:
   Planning            Implementation       Deployment
     ↓                    ↓                    ↓
-  Aphrodite              Parallel Agents      Ra
+  Athena                 Parallel Agents      Ra
   Apollo (find)     ├─ Hermes (backend)   (Docker/Deploy)
   ↓                 ├─ Aphrodite (frontend)
   plan.md           └─ Maat (database)
@@ -183,7 +183,7 @@ git commit -m "feat: Add JWT authentication"
 
 ### Your Request
 ```
-@aphrodite: Plan email verification flow with JWT expiry
+@athena: Plan email verification flow with JWT expiry
 
 Requirements:
 - User registration sends verification email
@@ -295,14 +295,14 @@ Each agent gets:
 │
 ├── agents/ (9 .agent.md files)
 │   ├── zeus.agent.md (orchestrator)
-│   ├── metis.agent.md (planner)
+│   ├── athena.agent.md (planner)
+│   ├── apollo.agent.md (discovery)
 │   ├── hermes.agent.md (backend)
-│   ├── athena.agent.md (frontend)
-│   ├── tethys.agent.md (database)
-│   ├── tyr.agent.md (reviewer)
-│   ├── hephaestus.agent.md (infrastructure)
-│   ├── mnemosyne.agent.md (memory)
-│   └── apollo.agent.md (discovery)
+│   ├── aphrodite.agent.md (frontend)
+│   ├── maat.agent.md (database)
+│   ├── temis.agent.md (reviewer)
+│   ├── ra.agent.md (infrastructure)
+│   └── mnemosyne.agent.md (memory)
 │
 ├── instructions/ (standards for code quality)
 │   ├── backend-standards.instructions.md
@@ -342,10 +342,10 @@ Each agent gets:
 @aphrodite: Refactor ProductCard component for performance
 
 # Just need database optimization?
-@tethys: Optimize users table queries (N+1 detection)
+@maat: Optimize users table queries (N+1 detection)
 
 # Just need code review?
-@tyr: Review this PR for security issues
+@temis: Review this PR for security issues
 
 # Just need to find patterns?
 @apollo: Find all uses of deprecated getUserById method
@@ -503,15 +503,15 @@ You can override Temis and proceed anyway at Pause Point 2. But if coverage <80%
 ### Common Scenarios
 
 - **"I want to add JWT auth"** → Use Quick Start section above
-- **"I need to optimize database queries"** → `@tethys: [optimize task]`
-- **"I need feedback on my code"** → `@tyr: Review [file] for [concern]`
-- **"I don't know where to start"** → Start with `@aphrodite: Plan [feature]`
+- **"I need to optimize database queries"** → `@maat: [optimize task]`
+- **"I need feedback on my code"** → `@temis: Review [file] for [concern]`
+- **"I don't know where to start"** → Start with `@athena: Plan [feature]`
 
 ---
 
 **Version:** 2.0  
-**Last Updated:** February 2026  
+**Last Updated:** February 5, 2026  
 **Status:** Production Ready  
 **MIT License:** Free to use, modify, distribute
 
-Ready to build faster? → `@aphrodite: Plan [your feature]` 🚀
+Ready to build faster? → `@athena: Plan [your feature]` 🚀
